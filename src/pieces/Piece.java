@@ -1,4 +1,9 @@
 package pieces;
 
-public interface Piece {
+public abstract class Piece {
+
+    boolean[][] possibleMoves() {
+        return new boolean[0][];
+    }
+
 }
