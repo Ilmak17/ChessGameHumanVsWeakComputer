@@ -24,7 +24,6 @@ public class Knight extends Piece {
         return (dCol == 1 && dRow == 2) || (dCol == 2 && dRow == 1);
     }
 
-
     @Override
     public String getPieceType() {
         return PieceType.KNIGHT.getName();
