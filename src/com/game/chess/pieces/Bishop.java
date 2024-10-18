@@ -1,14 +1,14 @@
 package com.game.chess.pieces;
 
 import com.game.chess.Position;
-import com.game.chess.enums.PieceType;
+import com.game.chess.pieces.enums.PieceType;
 
 public class Bishop extends Piece {
 
 
 
     @Override
-    public boolean isValidMode(Position position) {
+    public boolean isValidMode(Position destPosition) {
         if (getCaptured()) return false;
 
 

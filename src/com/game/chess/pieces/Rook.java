@@ -1,7 +1,7 @@
 package com.game.chess.pieces;
 
 import com.game.chess.Position;
-import com.game.chess.enums.PieceType;
+import com.game.chess.pieces.enums.PieceType;
 import com.game.chess.models.Board;
 
 public class Rook extends Piece {
@@ -15,7 +15,8 @@ public class Rook extends Piece {
 
         boolean movesInLine = isMovingInLine(destPosition);
         boolean pathIsClear = !isPathUnclear(destPosition);
-        boolean destinationIsEmptyOrEnemy = !getBoard().pieceExistsAt(destPosition);
+        boolean destinationIsEmptyOrEnemy = !getBoard().pieceExistsAt(destPosition)
+                || !getBoard().isPieceColor(destPosition, getColor());
 
         return movesInLine && pathIsClear && destinationIsEmptyOrEnemy;
     }
@@ -29,7 +30,8 @@ public class Rook extends Piece {
     private boolean isPathUnclear(Position destPosition) {
         Position curPosition = getPosition();
         Board board = getBoard();
-        int start, end;
+        int start;
+        int end;
 
         if (curPosition.getCol() == destPosition.getCol()) {
             start = Math.min(curPosition.getRow(), destPosition.getRow());
