@@ -1,16 +1,16 @@
-package com.chess;
+package com.game.chess.enums;
 
-public enum Figure {
+public enum PieceType {
     PAWN("P"),
-    BISHOP("B"),
     ROOK("R"),
     KNIGHT("N"),
+    BISHOP("B"),
     QUEEN("Q"),
     KING("K");
 
     private final String name;
 
-    Figure(String name) {
+    PieceType(String name) {
         this.name = name;
     }
 

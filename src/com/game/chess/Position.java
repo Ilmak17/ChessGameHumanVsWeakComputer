@@ -1,7 +1,4 @@
-package com.chess;
-
-
-import java.util.Objects;
+package com.game.chess;
 
 public class Position {
     private int row;
@@ -26,18 +23,5 @@ public class Position {
 
     public void setCol(int col) {
         this.col = col;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Position position = (Position) o;
-        return row == position.row && col == position.col;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(row, col);
     }
 }
