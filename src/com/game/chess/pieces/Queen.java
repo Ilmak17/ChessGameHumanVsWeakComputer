@@ -2,9 +2,14 @@ package com.game.chess.pieces;
 
 import com.game.chess.Position;
 import com.game.chess.models.Board;
+import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
 
 public class Queen extends DiagonalMovingPiece {
+
+    public Queen(Board board, Color color, Position position) {
+        super(board, color, position);
+    }
 
     @Override
     public boolean isValidMode(Position destPosition) {
@@ -23,6 +28,11 @@ public class Queen extends DiagonalMovingPiece {
         return isValidDiagonalMove(destPosition) || isValidStraightMove(destPosition);
     }
 
+    @Override
+    public String getPieceType() {
+        return PieceType.QUEEN.getName();
+    }
+
     private boolean isValidStraightMove(Position destPosition) {
         Position curPosition = getPosition();
         if (curPosition.getCol() != destPosition.getCol() && curPosition.getRow() != destPosition.getRow()) {
@@ -35,8 +45,4 @@ public class Queen extends DiagonalMovingPiece {
         return isPathClear(destPosition, stepRow, stepCol);
     }
 
-    @Override
-    public String getPieceType() {
-        return PieceType.QUEEN.getName();
-    }
 }

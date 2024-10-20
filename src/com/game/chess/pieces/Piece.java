@@ -12,6 +12,12 @@ public abstract class Piece implements Movement {
     private Boolean isCaptured;
     private Board board;
 
+    Piece(Board board, Color color, Position position) {
+        this.board = board;
+        this.color = color;
+        this.position = position;
+    }
+
     @Override
     public void move(Position position) {
         if (board.pieceExistsAt(position)) return;

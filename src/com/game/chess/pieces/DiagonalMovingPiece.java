@@ -3,8 +3,13 @@ package com.game.chess.pieces;
 
 import com.game.chess.Position;
 import com.game.chess.models.Board;
+import com.game.chess.pieces.enums.Color;
 
 public abstract class DiagonalMovingPiece extends Piece {
+
+    DiagonalMovingPiece(Board board, Color color, Position position) {
+        super(board, color, position);
+    }
 
     protected boolean isValidDiagonalMove(Position destPosition) {
         if (getCaptured()) return false;

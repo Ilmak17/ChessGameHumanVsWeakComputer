@@ -17,4 +17,14 @@ public enum PieceType {
     public String getName() {
         return name;
     }
+
+    public static PieceType fromChar(char promotionChoice) {
+        return switch (promotionChoice) {
+            case 'Q' -> PieceType.QUEEN;
+            case 'R' -> PieceType.ROOK;
+            case 'B' -> PieceType.BISHOP;
+            case 'N' -> PieceType.KNIGHT;
+            default -> throw new IllegalArgumentException("Incorrect promotion choice: " + promotionChoice);
+        };
+    }
 }

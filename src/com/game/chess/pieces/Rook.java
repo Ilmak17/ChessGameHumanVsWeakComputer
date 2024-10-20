@@ -1,10 +1,15 @@
 package com.game.chess.pieces;
 
 import com.game.chess.Position;
+import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
 import com.game.chess.models.Board;
 
 public class Rook extends Piece {
+
+    public Rook(Board board, Color color, Position position) {
+        super(board, color, position);
+    }
 
     @Override
     public boolean isValidMode(Position destPosition) {
@@ -18,6 +23,11 @@ public class Rook extends Piece {
                 || !getBoard().isPieceColor(destPosition, getColor());
 
         return movesInLine && pathIsClear && destinationIsEmptyOrEnemy;
+    }
+
+    @Override
+    public String getPieceType() {
+        return PieceType.ROOK.getName();
     }
 
     private boolean isMovingInLine(Position destPosition) {
@@ -53,10 +63,5 @@ public class Rook extends Piece {
         }
 
         return true;
-    }
-
-    @Override
-    public String getPieceType() {
-        return PieceType.ROOK.getName();
     }
 }
