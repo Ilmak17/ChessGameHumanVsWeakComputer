@@ -9,4 +9,6 @@ public interface Board {
     boolean pieceExistsAt(Position position);
     boolean isPieceColor(Position position, Color color);
     void capture(Position position);
+    boolean isKingInCheck(Color color);
+    boolean isSquareUnderAttack(Position position, Color color);
 }

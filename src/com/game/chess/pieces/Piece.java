@@ -11,6 +11,7 @@ public abstract class Piece implements Movement {
     private Color color;
     private Boolean isCaptured;
     private Board board;
+    private boolean moved;
 
     Piece(Board board, Color color, Position position) {
         this.board = board;
@@ -22,6 +23,11 @@ public abstract class Piece implements Movement {
     public void move(Position position) {
         if (board.pieceExistsAt(position)) return;
 
+        setPosition(position);
+    }
+
+    @Override
+    public void forceMove(Position position) {
         setPosition(position);
     }
 
@@ -57,5 +63,13 @@ public abstract class Piece implements Movement {
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public boolean isMoved() {
+        return moved;
+    }
+
+    public void setMoved(boolean moved) {
+        this.moved = moved;
     }
 }

@@ -53,6 +53,11 @@ public class Pawn extends Piece {
     @Override
     public void move(Position destPosition) {
         Board board = getBoard();
+
+        if (!isValidMode(destPosition)) {
+            return;
+        }
+
         if (!board.pieceExistsAt(destPosition) && !board.isPieceColor(destPosition, getColor())) {
             board.capture(destPosition);
         }
