@@ -6,7 +6,6 @@ import com.game.chess.models.Board;
 
 public class Rook extends Piece {
 
-
     @Override
     public boolean isValidMode(Position destPosition) {
         if (getCaptured()) {
@@ -14,7 +13,7 @@ public class Rook extends Piece {
         }
 
         boolean movesInLine = isMovingInLine(destPosition);
-        boolean pathIsClear = !isPathUnclear(destPosition);
+        boolean pathIsClear = isPathClear(destPosition);
         boolean destinationIsEmptyOrEnemy = !getBoard().pieceExistsAt(destPosition)
                 || !getBoard().isPieceColor(destPosition, getColor());
 
@@ -27,7 +26,7 @@ public class Rook extends Piece {
         return destPosition.getCol() != curPosition.getCol() && destPosition.getRow() != curPosition.getRow();
     }
 
-    private boolean isPathUnclear(Position destPosition) {
+    private boolean isPathClear(Position destPosition) {
         Position curPosition = getPosition();
         Board board = getBoard();
         int start;
@@ -39,7 +38,7 @@ public class Rook extends Piece {
 
             for (int i = start + 1; i < end; i++) {
                 if (board.pieceExistsAt(new Position(i, curPosition.getCol()))) {
-                    return true;
+                    return false;
                 }
             }
         } else {
@@ -48,12 +47,12 @@ public class Rook extends Piece {
 
             for (int i = start + 1; i < end; i++) {
                 if (board.pieceExistsAt(new Position(curPosition.getRow(), i))) {
-                    return true;
+                    return false;
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
     @Override
