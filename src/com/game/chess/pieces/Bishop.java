@@ -1,6 +1,5 @@
 package com.game.chess.pieces;
 
-import com.game.chess.Position;
 import com.game.chess.models.Board;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
@@ -19,5 +18,10 @@ public class Bishop extends DiagonalMovingPiece {
     @Override
     public String getPieceType() {
         return PieceType.BISHOP.getName();
+    }
+
+    @Override
+    public String getSymbol() {
+        return getColor().equals(Color.BLACK) ? "♝" : "♗";
     }
 }

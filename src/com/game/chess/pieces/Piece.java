@@ -1,7 +1,6 @@
 package com.game.chess.pieces;
 
 import com.game.chess.pieces.enums.Color;
-import com.game.chess.Position;
 import com.game.chess.models.Board;
 import com.game.chess.models.Movement;
 
@@ -32,6 +31,8 @@ public abstract class Piece implements Movement {
     }
 
     public abstract String getPieceType();
+
+    public abstract String getSymbol();
 
     public Position getPosition() {
         return position;

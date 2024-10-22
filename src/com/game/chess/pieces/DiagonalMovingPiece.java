@@ -1,7 +1,6 @@
 package com.game.chess.pieces;
 
 
-import com.game.chess.Position;
 import com.game.chess.models.Board;
 import com.game.chess.pieces.enums.Color;
 

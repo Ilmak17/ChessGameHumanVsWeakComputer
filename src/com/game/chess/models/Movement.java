@@ -1,6 +1,6 @@
 package com.game.chess.models;
 
-import com.game.chess.Position;
+import com.game.chess.pieces.Position;
 
 public interface Movement {
 

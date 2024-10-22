@@ -1,6 +1,5 @@
 package com.game.chess.pieces;
 
-import com.game.chess.Position;
 import com.game.chess.models.Board;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
@@ -31,6 +30,11 @@ public class Queen extends DiagonalMovingPiece {
     @Override
     public String getPieceType() {
         return PieceType.QUEEN.getName();
+    }
+
+    @Override
+    public String getSymbol() {
+        return getColor().equals(Color.BLACK) ? "♛" : "♕";
     }
 
     private boolean isValidStraightMove(Position destPosition) {

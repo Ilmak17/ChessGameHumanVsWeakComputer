@@ -1,6 +1,5 @@
 package com.game.chess.pieces;
 
-import com.game.chess.Position;
 import com.game.chess.models.Board;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
@@ -32,5 +31,10 @@ public class Knight extends Piece {
     @Override
     public String getPieceType() {
         return PieceType.KNIGHT.getName();
+    }
+
+    @Override
+    public String getSymbol() {
+        return getColor().equals(Color.BLACK) ? "♞" : "♘";
     }
 }

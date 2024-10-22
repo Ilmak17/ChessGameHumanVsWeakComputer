@@ -1,6 +1,5 @@
 package com.game.chess.pieces;
 
-import com.game.chess.Position;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
 import com.game.chess.models.Board;
@@ -28,6 +27,11 @@ public class Rook extends Piece {
     @Override
     public String getPieceType() {
         return PieceType.ROOK.getName();
+    }
+
+    @Override
+    public String getSymbol() {
+        return getColor().equals(Color.BLACK) ? "♜" : "♖";
     }
 
     private boolean isMovingInLine(Position destPosition) {

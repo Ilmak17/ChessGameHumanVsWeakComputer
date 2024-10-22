@@ -1,6 +1,5 @@
 package com.game.chess.pieces;
 
-import com.game.chess.Position;
 import com.game.chess.models.Board;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
@@ -67,6 +66,16 @@ public class Pawn extends Piece {
         }
     }
 
+    @Override
+    public String getPieceType() {
+        return PieceType.PAWN.getName();
+    }
+
+    @Override
+    public String getSymbol() {
+        return getColor().equals(Color.BLACK) ? "♟" : "♙";
+    }
+
     private void promote() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose new piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
@@ -92,10 +101,5 @@ public class Pawn extends Piece {
     private boolean shouldPromote() {
         return (getColor().equals(Color.WHITE) && getPosition().getRow() == 7) ||
                 (getColor().equals(Color.BLACK) && getPosition().getRow() == 0);
-    }
-
-    @Override
-    public String getPieceType() {
-        return PieceType.PAWN.getName();
     }
 }
