@@ -5,9 +5,9 @@ import com.game.chess.models.Board;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
 
+import java.util.List;
 import java.util.Scanner;
 
-import static com.game.chess.board.BoardImpl.pieces;
 import static java.util.Objects.nonNull;
 
 public class Pawn extends Piece {
@@ -17,7 +17,7 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public boolean isValidMode(Position destPosition) {
+    public boolean isValidMove(Position destPosition) {
         if (getCaptured()) {
             return false;
         }
@@ -54,7 +54,7 @@ public class Pawn extends Piece {
     public void move(Position destPosition) {
         Board board = getBoard();
 
-        if (!isValidMode(destPosition)) {
+        if (!isValidMove(destPosition)) {
             return;
         }
 
@@ -77,6 +77,7 @@ public class Pawn extends Piece {
             promotionChoice = scanner.next().toUpperCase().charAt(0);
         }
 
+        List<Piece> pieces = getBoard().getPieces();
         pieces.remove(this);
 
         switch (PieceType.fromChar(promotionChoice)) {

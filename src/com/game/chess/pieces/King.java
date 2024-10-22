@@ -5,7 +5,8 @@ import com.game.chess.models.Board;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
 
-import static com.game.chess.board.BoardImpl.pieces;
+import java.util.List;
+
 import static java.util.Objects.isNull;
 
 public class King extends Piece {
@@ -17,7 +18,7 @@ public class King extends Piece {
     }
 
     @Override
-    public boolean isValidMode(Position destPosition) {
+    public boolean isValidMove(Position destPosition) {
         if (getCaptured()) {
             return false;
         }
@@ -40,7 +41,7 @@ public class King extends Piece {
 
     @Override
     public void move(Position destPosition) {
-        if (canDoCastling(destPosition) && isValidMode(destPosition)) {
+        if (canDoCastling(destPosition) && isValidMove(destPosition)) {
 
             if (destPosition.getCol() == 0) {
                 int kingNewCol;
@@ -53,6 +54,8 @@ public class King extends Piece {
                     kingNewCol = 6;
                     rookNewCol = 5;
                 }
+
+                List<Piece> pieces = getBoard().getPieces();
 
                 forceMove(new Position(kingNewCol, destPosition.getRow()));
                 pieces.get(rookId).forceMove(new Position(rookNewCol, destPosition.getRow()));
@@ -104,6 +107,8 @@ public class King extends Piece {
                 return false;
             }
         }
+
+        List<Piece> pieces = getBoard().getPieces();
 
         setRookId(pieces.indexOf(rook));
 

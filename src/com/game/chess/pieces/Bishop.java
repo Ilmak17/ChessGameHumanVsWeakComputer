@@ -12,7 +12,7 @@ public class Bishop extends DiagonalMovingPiece {
     }
 
     @Override
-    public boolean isValidMode(Position destPosition) {
+    public boolean isValidMove(Position destPosition) {
         return isValidDiagonalMove(destPosition);
     }
 

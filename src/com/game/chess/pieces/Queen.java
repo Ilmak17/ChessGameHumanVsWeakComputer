@@ -12,7 +12,7 @@ public class Queen extends DiagonalMovingPiece {
     }
 
     @Override
-    public boolean isValidMode(Position destPosition) {
+    public boolean isValidMove(Position destPosition) {
         if (getCaptured()) {
             return false;
         }
