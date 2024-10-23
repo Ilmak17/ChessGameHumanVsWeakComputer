@@ -12,6 +12,7 @@ import com.game.chess.pieces.Rook;
 import com.game.chess.pieces.enums.Color;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.game.chess.pieces.enums.Color.BLACK;
@@ -48,13 +49,15 @@ public class BoardImpl implements Board {
 
     @Override
     public void capture(Position position) {
-        pieces.forEach(piece -> {
+        Iterator<Piece> iterator = pieces.iterator();
+        while (iterator.hasNext()) {
+            Piece piece = iterator.next();
             if (piece.getPosition().equals(position)) {
                 System.out.println("Killed: " + piece);
                 piece.setCaptured(true);
-                pieces.remove(piece);
+                iterator.remove();
             }
-        });
+        }
     }
 
     @Override
@@ -64,24 +67,30 @@ public class BoardImpl implements Board {
                 .findFirst()
                 .orElse(null);
 
-        if (isNull(checkedKing)) return false;
-
-        boolean isKingInCheck = pieces.stream()
-                .anyMatch(piece -> !piece.getColor().equals(color) && piece.isValidMove(checkedKing.getPosition()));
-
-        if (isKingInCheck) {
-            threateningPieceIdx = pieces.indexOf(checkedKing);
-            checkingKingIdx = pieces.indexOf(checkedKing);
+        if (isNull(checkedKing)) {
+            return false;
         }
 
-        return isKingInCheck;
+        Piece threateningPiece = pieces.stream()
+                .filter(piece -> !piece.getColor().equals(color) && piece.isValidMove(checkedKing.getPosition()))
+                .findFirst()
+                .orElse(null);
+
+        if (nonNull(threateningPiece)) {
+            threateningPieceIdx = pieces.indexOf(threateningPiece);
+            checkingKingIdx = pieces.indexOf(checkedKing);
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
     public boolean isSquareUnderAttack(Position position, Color color) {
         return pieces.stream()
                 .filter(piece -> !piece.getColor().equals(color))
-                .anyMatch(piece -> piece.isValidMove(piece.getPosition()));
+                .anyMatch(piece -> piece.isValidMove(position));
     }
 
     @Override
@@ -100,12 +109,12 @@ public class BoardImpl implements Board {
         for (int col = 0; col <= 7; col++) {
             for (int row = 0; row <= 7; row++) {
                 if (pieces.get(checkingKingIdx).isValidMove(new Position(row, col))) {
-                    return true;
+                    return false;
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
     @Override
