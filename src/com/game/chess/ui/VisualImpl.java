@@ -5,16 +5,16 @@ import com.game.chess.pieces.Piece;
 import com.game.chess.pieces.Position;
 import com.game.chess.pieces.enums.Color;
 
-public class UI {
+public class VisualImpl implements Visual {
 
     private final BoardImpl board;
 
-    public UI() {
+    public VisualImpl() {
         this.board = new BoardImpl();
     }
 
-    public void printBoard() {
-        System.out.println("  a  b  c  d  e  f  g  h");
+    public void print() {
+        System.out.println("   a  b  c  d  e  f  g  h");
 
         for (int row = 7; row >= 0; row--) {
             System.out.print((row + 1) + " ");
@@ -35,7 +35,7 @@ public class UI {
             System.out.println();
         }
 
-        System.out.println("  a  b  c  d  e  f  g  h");
+        System.out.println("   a  b  c  d  e  f  g  h");
     }
 
 }

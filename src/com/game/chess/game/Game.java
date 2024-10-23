@@ -1,4 +1,4 @@
-package com.game.chess.models;
+package com.game.chess.game;
 
 public interface Game {
     void startGame();

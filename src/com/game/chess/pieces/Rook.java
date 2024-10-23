@@ -2,7 +2,7 @@ package com.game.chess.pieces;
 
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
-import com.game.chess.models.Board;
+import com.game.chess.board.Board;
 
 public class Rook extends Piece {
 

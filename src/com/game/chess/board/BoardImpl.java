@@ -1,7 +1,6 @@
 package com.game.chess.board;
 
 import com.game.chess.pieces.Position;
-import com.game.chess.models.Board;
 import com.game.chess.pieces.Bishop;
 import com.game.chess.pieces.King;
 import com.game.chess.pieces.Knight;
