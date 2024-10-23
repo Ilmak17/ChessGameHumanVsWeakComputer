@@ -124,30 +124,27 @@ public class BoardImpl implements Board {
 
     public void initBoard() {
         for (int col = 0; col < 8; col++) {
-            pieces.add(new Pawn(this, WHITE, new Position(col, 1)));
-            pieces.add(new Pawn(this, BLACK, new Position(col, 6)));
+            pieces.add(new Pawn(this, WHITE, new Position(1, col)));
+            pieces.add(new Pawn(this, BLACK, new Position(6, col)));
         }
 
         pieces.add(new Rook(this, WHITE, new Position(0, 0)));
-        pieces.add(new Rook(this, WHITE, new Position(7, 0)));
-        pieces.add(new Rook(this, BLACK, new Position(0, 7)));
+        pieces.add(new Knight(this, WHITE, new Position(0, 1)));
+        pieces.add(new Bishop(this, WHITE, new Position(0, 2)));
+        pieces.add(new Queen(this, WHITE, new Position(0, 3)));
+        pieces.add(new King(this, WHITE, new Position(0, 4)));
+        pieces.add(new Bishop(this, WHITE, new Position(0, 5)));
+        pieces.add(new Knight(this, WHITE, new Position(0, 6)));
+        pieces.add(new Rook(this, WHITE, new Position(0, 7)));
+
+        pieces.add(new Rook(this, BLACK, new Position(7, 0)));
+        pieces.add(new Knight(this, BLACK, new Position(7, 1)));
+        pieces.add(new Bishop(this, BLACK, new Position(7, 2)));
+        pieces.add(new Queen(this, BLACK, new Position(7, 3)));
+        pieces.add(new King(this, BLACK, new Position(7, 4)));
+        pieces.add(new Bishop(this, BLACK, new Position(7, 5)));
+        pieces.add(new Knight(this, BLACK, new Position(7, 6)));
         pieces.add(new Rook(this, BLACK, new Position(7, 7)));
-
-        pieces.add(new Knight(this, WHITE, new Position(1, 0)));
-        pieces.add(new Knight(this, WHITE, new Position(6, 0)));
-        pieces.add(new Knight(this, BLACK, new Position(1, 7)));
-        pieces.add(new Knight(this, BLACK, new Position(6, 7)));
-
-        pieces.add(new Bishop(this, WHITE, new Position(2, 0)));
-        pieces.add(new Bishop(this, WHITE, new Position(5, 0)));
-        pieces.add(new Bishop(this, BLACK, new Position(2, 7)));
-        pieces.add(new Bishop(this, BLACK, new Position(5, 7)));
-
-        pieces.add(new Queen(this, WHITE, new Position(3, 0)));
-        pieces.add(new Queen(this, BLACK, new Position(3, 7)));
-
-        pieces.add(new King(this, WHITE, new Position(4, 0)));
-        pieces.add(new King(this, BLACK, new Position(4, 7)));
     }
 
     public int getCheckingKingIdx() {
