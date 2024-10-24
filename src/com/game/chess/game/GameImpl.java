@@ -11,7 +11,6 @@ import com.game.chess.ui.VisualImpl;
 import com.game.chess.input.InputHelper;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 import static java.util.Objects.nonNull;
@@ -51,9 +50,9 @@ public class GameImpl implements Game {
 
     private int getOption() {
         System.out.println("Choose option:");
-        System.out.println("1. Move Piece");
-        System.out.println("2. Offer a draw / Accept a draw");
-        System.out.println("3. Surrender");
+        System.out.println("1. Move");
+        System.out.println("2. Offer / Accept a draw");
+        System.out.println("3. Give up");
 
         return scanner.nextInt();
     }
@@ -72,14 +71,14 @@ public class GameImpl implements Game {
 
         while (!successful) {
             try {
-                SelectedPiece pieceSelection = getPlayerPieceSelection();
+                SelectedPiece pieceSelection = getSelectedPiece();
                 if (isCorrectColor(pieceSelection.getSelectedPieceIndex())) {
                     successful = tryMove(pieceSelection);
                 } else {
                     System.out.println("Wrong color. Try again.");
                 }
             } catch (Exception e) {
-                System.out.println("Piece not found or incorrect input. Try again.");
+                System.out.println("Piece not found or incorrect input. Please Try again.");
             }
         }
 
@@ -114,7 +113,7 @@ public class GameImpl implements Game {
             System.out.println("Your king is in check or will be after this move.");
         }
 
-        System.out.println("Invalid move, try again.");
+        System.out.println("Invalid move. Please try again.");
 
         return false;
     }
@@ -137,7 +136,6 @@ public class GameImpl implements Game {
         }
     }
 
-
     private boolean isMoveCausingCheckmate(Piece selectedPiece, Position targetPosition) {
         Position currentPosition = selectedPiece.getPosition();
         boolean moveCreatesCheckmate;
@@ -155,17 +153,8 @@ public class GameImpl implements Game {
         return moveCreatesCheckmate;
     }
 
-    private Position toPosition(String input) {
-        char colChar = input.charAt(0);
-        char rowChar = input.charAt(1);
-        int col = InputHelper.returnCol(colChar);
-        int row = InputHelper.returnRow(rowChar);
-
-        return new Position(row, col);
-    }
-
-    private SelectedPiece getPlayerPieceSelection() {
-        String input = getInput("Pick a piece (example E4): ");
+    private SelectedPiece getSelectedPiece() {
+        String input = getInput("Pick a piece (example E2): ");
         Position position = toPosition(input);
         int pieceIndex = InputHelper.findPieceIndexByPosition(board.getPieces(), position);
 
@@ -186,6 +175,13 @@ public class GameImpl implements Game {
 
         return (isWhiteTurn && pieces.get(pieceIndex).getColor() == Color.WHITE) ||
                 (!isWhiteTurn && pieces.get(pieceIndex).getColor() == Color.BLACK);
+    }
+
+    private Position toPosition(String input) {
+        char colChar = input.charAt(0);
+        char rowChar = input.charAt(1);
+
+        return new Position(InputHelper.returnCol(colChar), InputHelper.returnRow(rowChar));
     }
 
     private Color getColor() {
