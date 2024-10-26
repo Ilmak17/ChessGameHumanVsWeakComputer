@@ -12,20 +12,16 @@ public class Knight extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (getCaptured()) {
-            return false;
-        }
-        Board board = getBoard();
-
-        if (board.pieceExistsAt(destPosition) || board.isPieceColor(destPosition, getColor())) {
+        if (Boolean.TRUE.equals(getCaptured())) {
             return false;
         }
 
         Position curPosition = getPosition();
         int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
         int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
+        boolean isValid = (dCol == 1 && dRow == 2) || (dCol == 2 && dRow == 1);
 
-        return (dCol == 1 && dRow == 2) || (dCol == 2 && dRow == 1);
+        return isDestinationAvailable(destPosition) && isValid;
     }
 
     @Override

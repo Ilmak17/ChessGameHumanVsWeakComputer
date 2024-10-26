@@ -11,17 +11,11 @@ public abstract class SlidingPiece extends Piece {
     }
 
     protected boolean isValidLinearMove(Position destPosition) {
-        boolean movesInLine = isMovingInLine(destPosition);
-        boolean pathIsClear = isPathClear(destPosition);
-        boolean destinationIsEmptyOrEnemy = !getBoard().pieceExistsAt(destPosition)
-                || !getBoard().isPieceColor(destPosition, getColor());
-
-
-        return movesInLine && pathIsClear && destinationIsEmptyOrEnemy;
+        return isMovingInLine(destPosition) && isPathClear(destPosition)
+                && isDestinationAvailable(destPosition);
     }
 
     protected boolean isValidDiagonalMove(Position destPosition) {
-        if (getCaptured()) return false;
 
         Board board = getBoard();
         if (board.pieceExistsAt(destPosition) && board.isPieceColor(destPosition, getColor())) {
@@ -36,7 +30,7 @@ public abstract class SlidingPiece extends Piece {
             return false;
         }
 
-        return isPathClear(destPosition);
+        return isPathClear(destPosition) && isDestinationAvailable(destPosition);
     }
 
     private boolean isPathClear(Position destPosition) {

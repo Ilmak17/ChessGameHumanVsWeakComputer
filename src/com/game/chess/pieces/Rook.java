@@ -12,7 +12,7 @@ public class Rook extends SlidingPiece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (getCaptured()) {
+        if (Boolean.TRUE.equals(getCaptured())) {
             return false;
         }
 

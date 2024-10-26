@@ -106,13 +106,13 @@ public class GameImpl implements Game {
         Piece piece = pieces.get(selectedPieceIndex);
 
         if (piece.isValidMove(targetPosition)) {
-//            if (!isMoveCausingCheckmate(piece, targetPosition)) {
-            Piece piece1 = pieces.get(selectedPieceIndex);
-                piece1.move(targetPosition);
+            if (!isMoveCausingCheckmate(piece, targetPosition)) {
+               Piece piece1 = pieces.get(selectedPieceIndex);
+               piece1.move(targetPosition);
 
                 return true;
-//            }
-//            System.out.println("Your king is in check or will be after this move.");
+            }
+            System.out.println("Your king is in check or will be after this move.");
         }
 
         System.out.println("Invalid move. Please try again.");

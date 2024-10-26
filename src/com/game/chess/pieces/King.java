@@ -18,11 +18,7 @@ public class King extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (getCaptured()) {
-            return false;
-        }
-
-        if (getBoard().pieceExistsAt(destPosition) || getBoard().isPieceColor(destPosition, getColor())) {
+        if (Boolean.TRUE.equals(getCaptured())) {
             return false;
         }
 
@@ -35,7 +31,7 @@ public class King extends Piece {
             return canDoCastling(destPosition);
         }
 
-        return dCol <= 1 && dRow <= 1;
+        return dCol <= 1 && dRow <= 1 && isDestinationAvailable(destPosition);
     }
 
     @Override

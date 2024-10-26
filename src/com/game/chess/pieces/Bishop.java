@@ -12,6 +12,10 @@ public class Bishop extends SlidingPiece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
+        if (Boolean.TRUE.equals(getCaptured())) {
+            return false;
+        }
+
         return isValidDiagonalMove(destPosition);
     }
 

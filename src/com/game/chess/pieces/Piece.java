@@ -33,6 +33,10 @@ public abstract class Piece implements Movement {
 
     public abstract String getSymbol();
 
+    protected boolean isDestinationAvailable(Position destPosition) {
+        return !getBoard().pieceExistsAt(destPosition) || !getBoard().isPieceColor(destPosition, getColor());
+    }
+
     public Position getPosition() {
         return position;
     }

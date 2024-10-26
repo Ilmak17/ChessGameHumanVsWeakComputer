@@ -21,7 +21,7 @@ public class Pawn extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (getCaptured()) {
+        if (Boolean.TRUE.equals(getCaptured())) {
             return false;
         }
 
@@ -31,7 +31,7 @@ public class Pawn extends Piece {
 
         if (destPosition.getCol() == curPosition.getCol()) {
             if (destPosition.getRow() == curPosition.getRow() + direction) {
-                return !board.pieceExistsAt(destPosition);
+                return isDestinationAvailable(destPosition);
             } else if ((curPosition.getRow() == 1 && getColor().equals(Color.WHITE))
                     || (curPosition.getRow() == 6 && getColor().equals(Color.BLACK))) {
                 return destPosition.getRow() == curPosition.getRow() + 2 * direction
@@ -76,7 +76,7 @@ public class Pawn extends Piece {
     }
 
     private void promote(Scanner scanner) {
-        System.out.println("Choose new piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
+        System.out.println("Choose a new piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
         String promotionChoice = String.valueOf(scanner.next().toUpperCase().charAt(0));
 
         List<String> types = List.of(QUEEN.getName(), ROOK.getName(), BISHOP.getName(), KNIGHT.getName());
