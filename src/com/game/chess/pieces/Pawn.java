@@ -26,31 +26,24 @@ public class Pawn extends Piece {
         }
 
         Board board = getBoard();
-
-        if (board.pieceExistsAt(destPosition)) {
-            return false;
-        }
-
         int direction = getColor().equals(Color.WHITE) ? 1 : -1;
         Position curPosition = getPosition();
 
         if (destPosition.getCol() == curPosition.getCol()) {
             if (destPosition.getRow() == curPosition.getRow() + direction) {
-                return true;
+                return !board.pieceExistsAt(destPosition);
             } else if ((curPosition.getRow() == 1 && getColor().equals(Color.WHITE))
                     || (curPosition.getRow() == 6 && getColor().equals(Color.BLACK))) {
                 return destPosition.getRow() == curPosition.getRow() + 2 * direction
-                        && !board.pieceExistsAt(
-                        new Position(curPosition.getRow() + direction, destPosition.getCol()));
+                        && !board.pieceExistsAt(new Position(curPosition.getRow() + direction, curPosition.getCol()))
+                        && !board.pieceExistsAt(destPosition);
             }
         } else if (Math.abs(destPosition.getCol() - curPosition.getCol()) == 1
                 && destPosition.getRow() == curPosition.getRow() + direction) {
             Piece pieceByPosition = board.getPieceByPosition(destPosition);
-
             return nonNull(pieceByPosition) && !pieceByPosition.getColor().equals(getColor());
         }
-
-        return true;
+        return false;
     }
 
     @Override
@@ -61,12 +54,14 @@ public class Pawn extends Piece {
             return;
         }
 
-        if (!board.pieceExistsAt(destPosition) && !board.isPieceColor(destPosition, getColor())) {
+        if (board.pieceExistsAt(destPosition) && !board.isPieceColor(destPosition, getColor())) {
             board.capture(destPosition);
         }
+
         setPosition(destPosition);
+
         if (shouldPromote()) {
-            promote();
+            promote(new Scanner(System.in));
         }
     }
 
@@ -80,8 +75,7 @@ public class Pawn extends Piece {
         return getColor().equals(Color.BLACK) ? "♟" : "♙";
     }
 
-    private void promote() {
-        Scanner scanner = new Scanner(System.in);
+    private void promote(Scanner scanner) {
         System.out.println("Choose new piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
         String promotionChoice = String.valueOf(scanner.next().toUpperCase().charAt(0));
 

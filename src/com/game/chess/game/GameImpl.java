@@ -2,13 +2,13 @@ package com.game.chess.game;
 
 import com.game.chess.board.BoardImpl;
 import com.game.chess.board.Board;
-import com.game.chess.input.SelectedPiece;
+import com.game.chess.game.input.SelectedPiece;
 import com.game.chess.pieces.Piece;
 import com.game.chess.pieces.Position;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.ui.Visual;
 import com.game.chess.ui.VisualImpl;
-import com.game.chess.input.InputHelper;
+import com.game.chess.game.input.InputHelper;
 
 import java.util.List;
 import java.util.Scanner;
@@ -25,7 +25,7 @@ public class GameImpl implements Game {
 
     public GameImpl() {
         board = new BoardImpl();
-        visual = new VisualImpl();
+        visual = new VisualImpl(board);
         scanner = new Scanner(System.in);
         this.running = true;
         this.isWhiteTurn = true;
@@ -73,7 +73,7 @@ public class GameImpl implements Game {
             try {
                 SelectedPiece pieceSelection = getSelectedPiece();
                 if (!isCorrectColor(pieceSelection.getSelectedPieceIndex())) {
-                    System.out.println("Wrong color. Please Try again.");
+                    System.out.println("Wrong color selected. Turn is for: " + getColor());
                     return;
                 }
 
@@ -106,12 +106,13 @@ public class GameImpl implements Game {
         Piece piece = pieces.get(selectedPieceIndex);
 
         if (piece.isValidMove(targetPosition)) {
-            if (!isMoveCausingCheckmate(piece, targetPosition)) {
-                pieces.get(selectedPieceIndex).move(targetPosition);
+//            if (!isMoveCausingCheckmate(piece, targetPosition)) {
+            Piece piece1 = pieces.get(selectedPieceIndex);
+                piece1.move(targetPosition);
 
                 return true;
-            }
-            System.out.println("Your king is in check or will be after this move.");
+//            }
+//            System.out.println("Your king is in check or will be after this move.");
         }
 
         System.out.println("Invalid move. Please try again.");
@@ -182,7 +183,9 @@ public class GameImpl implements Game {
         char colChar = input.charAt(0);
         char rowChar = input.charAt(1);
 
-        return new Position(InputHelper.returnCol(colChar), InputHelper.returnRow(rowChar));
+        int col = InputHelper.returnCol(colChar);
+        int row = InputHelper.returnRow(rowChar);
+        return new Position(row, col);
     }
 
     private Color getColor() {

@@ -1,16 +1,16 @@
 package com.game.chess.ui;
 
-import com.game.chess.board.BoardImpl;
+import com.game.chess.board.Board;
 import com.game.chess.pieces.Piece;
 import com.game.chess.pieces.Position;
 import com.game.chess.pieces.enums.Color;
 
 public class VisualImpl implements Visual {
 
-    private final BoardImpl board;
+    private final Board board;
 
-    public VisualImpl() {
-        this.board = new BoardImpl();
+    public VisualImpl(Board board) {
+        this.board = board;
     }
 
     public void print() {

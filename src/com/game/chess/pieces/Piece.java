@@ -7,7 +7,7 @@ public abstract class Piece implements Movement {
 
     private Position position;
     private Color color;
-    private Boolean isCaptured;
+    private Boolean isCaptured = Boolean.FALSE;
     private Board board;
     private boolean moved;
 

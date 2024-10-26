@@ -1,4 +1,4 @@
-package com.game.chess.input;
+package com.game.chess.game.input;
 
 import com.game.chess.pieces.Position;
 

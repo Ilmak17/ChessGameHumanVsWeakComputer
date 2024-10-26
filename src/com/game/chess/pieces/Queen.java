@@ -4,7 +4,7 @@ import com.game.chess.board.Board;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
 
-public class Queen extends DiagonalMovingPiece {
+public class Queen extends SlidingPiece {
 
     public Queen(Board board, Color color, Position position) {
         super(board, color, position);
@@ -24,7 +24,7 @@ public class Queen extends DiagonalMovingPiece {
             return false;
         }
 
-        return isValidDiagonalMove(destPosition) || isValidStraightMove(destPosition);
+        return isValidDiagonalMove(destPosition) || isValidLinearMove(destPosition);
     }
 
     @Override
@@ -36,17 +36,4 @@ public class Queen extends DiagonalMovingPiece {
     public String getSymbol() {
         return getColor().equals(Color.BLACK) ? "♛" : "♕";
     }
-
-    private boolean isValidStraightMove(Position destPosition) {
-        Position curPosition = getPosition();
-        if (curPosition.getCol() != destPosition.getCol() && curPosition.getRow() != destPosition.getRow()) {
-            return false;
-        }
-
-        int stepCol = Integer.compare(destPosition.getCol(), curPosition.getCol());
-        int stepRow = Integer.compare(destPosition.getRow(), curPosition.getRow());
-
-        return isPathClear(destPosition, stepRow, stepCol);
-    }
-
 }

@@ -145,13 +145,4 @@ public class BoardImpl implements Board {
         pieces.add(new Knight(this, BLACK, new Position(7, 6)));
         pieces.add(new Rook(this, BLACK, new Position(7, 7)));
     }
-
-    public int getCheckingKingIdx() {
-        return checkingKingIdx;
-    }
-
-    public int getThreateningPieceIdx() {
-        return threateningPieceIdx;
-    }
-
 }
