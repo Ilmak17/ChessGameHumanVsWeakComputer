@@ -38,8 +38,8 @@ public class GameImpl implements Game {
             visual.print();
             System.out.println("Turn of: " + (isWhiteTurn ? "White Player" : "Black Player"));
             int choice = getOption();
-
             handleChoice(choice);
+
             if (running) {
                 drawOffered = false;
             }
@@ -72,11 +72,12 @@ public class GameImpl implements Game {
         while (!successful) {
             try {
                 SelectedPiece pieceSelection = getSelectedPiece();
-                if (isCorrectColor(pieceSelection.getSelectedPieceIndex())) {
-                    successful = tryMove(pieceSelection);
-                } else {
-                    System.out.println("Wrong color. Try again.");
+                if (!isCorrectColor(pieceSelection.getSelectedPieceIndex())) {
+                    System.out.println("Wrong color. Please Try again.");
+                    return;
                 }
+
+                successful = tryMove(pieceSelection);
             } catch (Exception e) {
                 System.out.println("Piece not found or incorrect input. Please Try again.");
             }
@@ -98,7 +99,7 @@ public class GameImpl implements Game {
     }
 
     private boolean tryMove(SelectedPiece selectedPiece) {
-        String input = getInput("Select a target field (example E2): ");
+        String input = getInput("Select a target field (Example E2): ");
         Position targetPosition = toPosition(input);
         int selectedPieceIndex = selectedPiece.getSelectedPieceIndex();
         List<Piece> pieces = board.getPieces();

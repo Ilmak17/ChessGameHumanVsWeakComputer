@@ -7,6 +7,10 @@ import com.game.chess.pieces.enums.PieceType;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.game.chess.pieces.enums.PieceType.BISHOP;
+import static com.game.chess.pieces.enums.PieceType.KNIGHT;
+import static com.game.chess.pieces.enums.PieceType.QUEEN;
+import static com.game.chess.pieces.enums.PieceType.ROOK;
 import static java.util.Objects.nonNull;
 
 public class Pawn extends Piece {
@@ -79,22 +83,23 @@ public class Pawn extends Piece {
     private void promote() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose new piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
-        char promotionChoice = scanner.next().toUpperCase().charAt(0);
+        String promotionChoice = String.valueOf(scanner.next().toUpperCase().charAt(0));
 
-        while (promotionChoice != 'Q' && promotionChoice != 'R' && promotionChoice != 'B' && promotionChoice != 'N') {
-            System.out.println("Incorrect input (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
-            promotionChoice = scanner.next().toUpperCase().charAt(0);
+        List<String> types = List.of(QUEEN.getName(), ROOK.getName(), BISHOP.getName(), KNIGHT.getName());
+        while (!types.contains(promotionChoice)) {
+            System.out.println("Choose correct piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
+            promotionChoice = String.valueOf(scanner.next().toUpperCase().charAt(0));
         }
 
         List<Piece> pieces = getBoard().getPieces();
         pieces.remove(this);
 
-        switch (PieceType.fromChar(promotionChoice)) {
+        switch (PieceType.convertToType(promotionChoice)) {
             case QUEEN -> pieces.add(new Queen(getBoard(), getColor(), getPosition()));
             case ROOK -> pieces.add(new Rook(getBoard(), getColor(), getPosition()));
             case BISHOP -> pieces.add(new Bishop(getBoard(), getColor(), getPosition()));
             case KNIGHT -> pieces.add(new Knight(getBoard(), getColor(), getPosition()));
-            default -> throw new IllegalArgumentException("Incorrect promotion choice");
+            default -> System.out.println("Incorrect promotion choice");
         }
     }
 
