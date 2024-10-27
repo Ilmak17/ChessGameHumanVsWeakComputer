@@ -22,27 +22,30 @@ public class Pawn extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-
         Board board = getBoard();
-        int direction = getColor().equals(Color.WHITE) ? 1 : -1;
         Position curPosition = getPosition();
+        int direction = getColor().equals(Color.WHITE) ? 1 : -1;
 
         if (destPosition.getCol() == curPosition.getCol()) {
             if (destPosition.getRow() == curPosition.getRow() + direction) {
-                return isDestinationAvailable(destPosition);
-            } else if ((curPosition.getRow() == 1 && getColor().equals(Color.WHITE))
-                    || (curPosition.getRow() == 6 && getColor().equals(Color.BLACK))) {
+                return !board.pieceExistsAt(destPosition);
+            } else if ((curPosition.getRow() == 1 && getColor().equals(Color.WHITE)) ||
+                    (curPosition.getRow() == 6 && getColor().equals(Color.BLACK))) {
+                Position newPos = new Position(curPosition.getRow() + direction, curPosition.getCol());
+
                 return destPosition.getRow() == curPosition.getRow() + 2 * direction
-                        && !board.pieceExistsAt(new Position(curPosition.getRow() + direction, curPosition.getCol()))
+                        && !board.pieceExistsAt(newPos)
                         && !board.pieceExistsAt(destPosition);
             }
-        } else if (Math.abs(destPosition.getCol() - curPosition.getCol()) == 1
-                && destPosition.getRow() == curPosition.getRow() + direction) {
+        } else if (Math.abs(destPosition.getCol() - curPosition.getCol()) == 1 &&
+                destPosition.getRow() == curPosition.getRow() + direction) {
             Piece pieceByPosition = board.getPieceByPosition(destPosition);
             return nonNull(pieceByPosition) && !pieceByPosition.getColor().equals(getColor());
         }
+
         return false;
     }
+
 
     @Override
     public void move(Position destPosition) {

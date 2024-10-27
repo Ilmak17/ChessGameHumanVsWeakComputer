@@ -1,6 +1,5 @@
 package com.game.chess.pieces;
 
-
 import com.game.chess.board.Board;
 import com.game.chess.pieces.enums.Color;
 
@@ -11,26 +10,15 @@ public abstract class SlidingPiece extends Piece {
     }
 
     protected boolean isValidLinearMove(Position destPosition) {
-        return isMovingInLine(destPosition) && isPathClear(destPosition)
-                && isDestinationAvailable(destPosition);
+        return isMovingInLine(destPosition) && isPathClear(destPosition) && isDestinationAvailable(destPosition);
     }
 
     protected boolean isValidDiagonalMove(Position destPosition) {
-
-        Board board = getBoard();
-        if (board.pieceExistsAt(destPosition) && board.isPieceColor(destPosition, getColor())) {
-            return false;
-        }
-
         Position curPosition = getPosition();
         int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
         int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
 
-        if (dCol != dRow) {
-            return false;
-        }
-
-        return isPathClear(destPosition) && isDestinationAvailable(destPosition);
+        return dCol == dRow && isPathClear(destPosition) && isDestinationAvailable(destPosition);
     }
 
     private boolean isPathClear(Position destPosition) {

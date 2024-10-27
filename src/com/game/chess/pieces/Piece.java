@@ -3,6 +3,8 @@ package com.game.chess.pieces;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.board.Board;
 
+import static java.util.Objects.isNull;
+
 public abstract class Piece implements Movement {
 
     private Position position;
@@ -19,9 +21,16 @@ public abstract class Piece implements Movement {
 
     @Override
     public void move(Position position) {
-        if (board.pieceExistsAt(position)) return;
+        if (Boolean.TRUE.equals(isCaptured) || !isValidMove(position)) {
+            return;
+        }
+
+        if (board.pieceExistsAt(position) && !board.isPieceColor(position, getColor())) {
+            getBoard().capture(position);
+        }
 
         setPosition(position);
+        setMoved(true);
     }
 
     @Override
@@ -34,7 +43,9 @@ public abstract class Piece implements Movement {
     public abstract String getSymbol();
 
     protected boolean isDestinationAvailable(Position destPosition) {
-        return !getBoard().pieceExistsAt(destPosition) || !getBoard().isPieceColor(destPosition, getColor());
+        Piece targetPiece = board.getPieceByPosition(destPosition);
+
+        return isNull(targetPiece) || !targetPiece.getColor().equals(getColor());
     }
 
     public Position getPosition() {

@@ -1,8 +1,8 @@
 package com.game.chess.pieces;
 
-import com.game.chess.board.Board;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.pieces.enums.PieceType;
+import com.game.chess.board.Board;
 
 public class Queen extends SlidingPiece {
 
@@ -12,10 +12,6 @@ public class Queen extends SlidingPiece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (Boolean.TRUE.equals(getCaptured())) {
-            return false;
-        }
-
         Position curPosition = getPosition();
         int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
         int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
@@ -40,4 +36,3 @@ public class Queen extends SlidingPiece {
         return getColor().equals(Color.BLACK) ? "♛" : "♕";
     }
 }
-

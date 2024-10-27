@@ -12,10 +12,6 @@ public class Rook extends SlidingPiece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (Boolean.TRUE.equals(getCaptured())) {
-            return false;
-        }
-
         return isValidLinearMove(destPosition);
     }
 

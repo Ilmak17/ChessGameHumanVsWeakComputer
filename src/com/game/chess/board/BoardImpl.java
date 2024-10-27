@@ -54,9 +54,9 @@ public class BoardImpl implements Board {
         while (iterator.hasNext()) {
             Piece piece = iterator.next();
             if (piece.getPosition().equals(position)) {
-                System.out.println("Killed: " + piece);
                 piece.setCaptured(true);
                 iterator.remove();
+                break;
             }
         }
     }

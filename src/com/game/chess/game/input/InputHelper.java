@@ -7,6 +7,7 @@ import java.util.List;
 
 
 public class InputHelper {
+    private InputHelper() {}
 
     public static int returnCol(char character) {
         character = Character.toUpperCase(character);
