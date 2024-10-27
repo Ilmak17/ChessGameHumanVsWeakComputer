@@ -5,6 +5,8 @@ import com.game.chess.pieces.Piece;
 import com.game.chess.pieces.Position;
 import com.game.chess.pieces.enums.Color;
 
+import static java.util.Objects.isNull;
+
 public class VisualImpl implements Visual {
 
     private final Board board;
@@ -24,7 +26,7 @@ public class VisualImpl implements Visual {
 
                 String backgroundColor = (row + col) % 2 == 0 ? "48;5;252" : "48;5;110";
 
-                if (piece == null) {
+                if (isNull(piece)) {
                     System.out.print("\u001B[" + backgroundColor + "m   \u001B[0m");
                 } else {
                     String pieceColor = piece.getColor() == Color.WHITE ? "97" : "30";

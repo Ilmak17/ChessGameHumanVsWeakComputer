@@ -23,11 +23,10 @@ public class King extends Piece {
         }
 
         Position curPosition = getPosition();
-
         int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
         int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
 
-        if ((dCol == 2 || dCol == 3) && dRow == 0) {
+        if (dCol == 2 && dRow == 0) {
             return canDoCastling(destPosition);
         }
 
@@ -37,27 +36,15 @@ public class King extends Piece {
     @Override
     public void move(Position destPosition) {
         if (canDoCastling(destPosition) && isValidMove(destPosition)) {
+            int kingNewCol = destPosition.getCol() > getPosition().getCol() ? 6 : 2;
+            int rookNewCol = destPosition.getCol() > getPosition().getCol() ? 5 : 3;
+            List<Piece> pieces = getBoard().getPieces();
 
-            if (destPosition.getCol() == 0) {
-                int kingNewCol;
-                int rookNewCol;
+            forceMove(new Position(destPosition.getRow(), kingNewCol));
+            pieces.get(rookId).forceMove(new Position(destPosition.getRow(), rookNewCol));
 
-                if (destPosition.getCol() == 0) {
-                    kingNewCol = 2;
-                    rookNewCol = 3;
-                } else {
-                    kingNewCol = 6;
-                    rookNewCol = 5;
-                }
-
-                List<Piece> pieces = getBoard().getPieces();
-
-                forceMove(new Position(kingNewCol, destPosition.getRow()));
-                pieces.get(rookId).forceMove(new Position(rookNewCol, destPosition.getRow()));
-
-                setMoved(true);
-                pieces.get(rookId).setMoved(true);
-            }
+            setMoved(true);
+            pieces.get(rookId).setMoved(true);
 
             return;
         }
@@ -77,24 +64,22 @@ public class King extends Piece {
 
     private boolean canDoCastling(Position destPosition) {
         Board board = getBoard();
+
         if (board.isKingInCheck(getColor())) {
             return false;
         }
-
 
         Position curPosition = getPosition();
         int rookCol = (destPosition.getCol() > curPosition.getCol()) ? 7 : 0;
         int rookRow = curPosition.getRow();
 
-        Piece rook = board.getPieceByPosition(new Position(rookCol, rookRow));
-
-        if (isNull(rook) || rook.isMoved() || rook.getColor() != getColor()) {
+        Piece rook = board.getPieceByPosition(new Position(rookRow, rookCol));
+        if (isNull(rook) || !(rook instanceof Rook) || rook.isMoved() || rook.getColor() != getColor()) {
             return false;
         }
 
         int minCol = Math.min(curPosition.getCol(), rookCol);
         int maxCol = Math.max(curPosition.getCol(), rookCol);
-
         for (int i = minCol + 1; i < maxCol; i++) {
             if (board.pieceExistsAt(new Position(curPosition.getRow(), i))) {
                 return false;
@@ -103,13 +88,12 @@ public class King extends Piece {
 
         for (int col = curPosition.getCol(); col != destPosition.getCol();
              col += Integer.compare(destPosition.getCol(), curPosition.getCol())) {
-            if (board.isSquareUnderAttack(new Position(destPosition.getRow(), col), this.getColor())) {
+            if (board.isSquareUnderAttack(new Position(curPosition.getRow(), col), getColor())) {
                 return false;
             }
         }
 
-        List<Piece> pieces = getBoard().getPieces();
-
+        List<Piece> pieces = board.getPieces();
         setRookId(pieces.indexOf(rook));
 
         return true;

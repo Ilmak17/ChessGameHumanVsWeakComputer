@@ -23,6 +23,10 @@ public class GameImpl implements Game {
     private boolean isWhiteTurn;
     private boolean drawOffered;
 
+    private static final String MOVE = "1";
+    private static final String DRAW = "2";
+    private static final String SURRENDER = "3";
+
     public GameImpl() {
         board = new BoardImpl();
         visual = new VisualImpl(board);
@@ -37,7 +41,7 @@ public class GameImpl implements Game {
         while (running) {
             visual.print();
             System.out.println("Turn of: " + (isWhiteTurn ? "White Player" : "Black Player"));
-            int choice = getOption();
+            String choice = getOption();
             handleChoice(choice);
 
             if (running) {
@@ -48,20 +52,20 @@ public class GameImpl implements Game {
         scanner.close();
     }
 
-    private int getOption() {
+    private String getOption() {
         System.out.println("Choose option:");
         System.out.println("1. Move");
         System.out.println("2. Offer / Accept a draw");
         System.out.println("3. Give up");
 
-        return scanner.nextInt();
+        return scanner.next();
     }
 
-    private void handleChoice(int choice) {
+    private void handleChoice(String choice) {
         switch (choice) {
-            case 1 -> move();
-            case 2 -> offerDraw();
-            case 3 -> giveUp();
+            case MOVE -> move();
+            case DRAW -> offerDraw();
+            case SURRENDER -> giveUp();
             default -> System.out.println("Invalid selection. Please try again.");
         }
     }
@@ -99,7 +103,7 @@ public class GameImpl implements Game {
     }
 
     private boolean tryMove(SelectedPiece selectedPiece) {
-        String input = getInput("Select a target field (Example E2): ");
+        String input = getInput("Select a target field (Example E3): ");
         Position targetPosition = toPosition(input);
         int selectedPieceIndex = selectedPiece.getSelectedPieceIndex();
         List<Piece> pieces = board.getPieces();

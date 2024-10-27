@@ -11,11 +11,13 @@ public class InputHelper {
     public static int returnCol(char character) {
         character = Character.toUpperCase(character);
         int col = character - 'A';
+
         return (col >= 0 && col <= 7) ? col : -1;
     }
 
     public static int returnRow(char number) {
         int row = number - '1';
+
         return (row >= 0 && row <= 7) ? row : -1;
     }
 
