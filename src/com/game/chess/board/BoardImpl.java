@@ -43,7 +43,9 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean isPieceColor(Position position, Color color) {
-        return getPieceByPosition(position).getColor().equals(color);
+        Piece piece = getPieceByPosition(position);
+
+        return nonNull(piece) && piece.getColor().equals(color);
     }
 
     @Override

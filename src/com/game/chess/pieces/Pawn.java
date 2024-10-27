@@ -14,6 +14,7 @@ import static com.game.chess.pieces.enums.PieceType.ROOK;
 import static java.util.Objects.nonNull;
 
 public class Pawn extends Piece {
+    private static final List<String> PROMOTION_TYPES = List.of(QUEEN.getName(), ROOK.getName(), BISHOP.getName(), KNIGHT.getName());
 
     public Pawn(Board board, Color color, Position position) {
         super(board, color, position);
@@ -21,9 +22,6 @@ public class Pawn extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (Boolean.TRUE.equals(getCaptured())) {
-            return false;
-        }
 
         Board board = getBoard();
         int direction = getColor().equals(Color.WHITE) ? 1 : -1;
@@ -79,8 +77,7 @@ public class Pawn extends Piece {
         System.out.println("Choose a new piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
         String promotionChoice = String.valueOf(scanner.next().toUpperCase().charAt(0));
 
-        List<String> types = List.of(QUEEN.getName(), ROOK.getName(), BISHOP.getName(), KNIGHT.getName());
-        while (!types.contains(promotionChoice)) {
+        while (!PROMOTION_TYPES.contains(promotionChoice)) {
             System.out.println("Choose correct piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
             promotionChoice = String.valueOf(scanner.next().toUpperCase().charAt(0));
         }

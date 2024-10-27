@@ -111,22 +111,18 @@ public class GameImpl implements Game {
 
         if (piece.isValidMove(targetPosition)) {
             if (!isMoveCausingCheckmate(piece, targetPosition)) {
-               Piece piece1 = pieces.get(selectedPieceIndex);
-               piece1.move(targetPosition);
-
+                pieces.get(selectedPieceIndex).move(targetPosition);
                 return true;
             }
             System.out.println("Your king is in check or will be after this move.");
+        } else {
+            System.out.println("Invalid move. Please try again.");
         }
-
-        System.out.println("Invalid move. Please try again.");
-
         return false;
     }
 
     private void giveUp() {
         System.out.println("The " + getColor() + " Player Gave up. End of the game...");
-
         running = false;
     }
 
@@ -135,9 +131,7 @@ public class GameImpl implements Game {
         if (board.isCheckmate(color) && !board.canPreventCheckmate()) {
             System.out.println("Check Mate! " + color);
             running = false;
-        }
-
-        if (board.isKingInCheck(color)) {
+        } else if (board.isKingInCheck(color)) {
             System.out.println("The " + color + " King is in check!");
         }
     }
@@ -179,8 +173,7 @@ public class GameImpl implements Game {
     private boolean isCorrectColor(int pieceIndex) {
         List<Piece> pieces = board.getPieces();
 
-        return (isWhiteTurn && pieces.get(pieceIndex).getColor() == Color.WHITE) ||
-                (!isWhiteTurn && pieces.get(pieceIndex).getColor() == Color.BLACK);
+        return pieces.get(pieceIndex).getColor() == (isWhiteTurn ? Color.WHITE : Color.BLACK);
     }
 
     private Position toPosition(String input) {
