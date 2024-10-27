@@ -14,6 +14,8 @@ import static com.game.chess.pieces.enums.PieceType.ROOK;
 import static java.util.Objects.nonNull;
 
 public class Pawn extends Piece {
+    private static final List<String> PROMOTION_TYPES = List.of(QUEEN.getName(), ROOK.getName(), BISHOP.getName(), KNIGHT.getName());
+    private static final Scanner scanner = new Scanner(System.in);
 
     public Pawn(Board board, Color color, Position position) {
         super(board, color, position);
@@ -21,28 +23,27 @@ public class Pawn extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (Boolean.TRUE.equals(getCaptured())) {
-            return false;
-        }
-
         Board board = getBoard();
-        int direction = getColor().equals(Color.WHITE) ? 1 : -1;
         Position curPosition = getPosition();
+        int direction = getColor() == Color.WHITE ? 1 : -1;
+        int oneStepRow = curPosition.getRow() + direction;
+        int twoStepRow = curPosition.getRow() + 2 * direction;
 
-        if (destPosition.getCol() == curPosition.getCol()) {
-            if (destPosition.getRow() == curPosition.getRow() + direction) {
-                return isDestinationAvailable(destPosition);
-            } else if ((curPosition.getRow() == 1 && getColor().equals(Color.WHITE))
-                    || (curPosition.getRow() == 6 && getColor().equals(Color.BLACK))) {
-                return destPosition.getRow() == curPosition.getRow() + 2 * direction
-                        && !board.pieceExistsAt(new Position(curPosition.getRow() + direction, curPosition.getCol()))
-                        && !board.pieceExistsAt(destPosition);
-            }
-        } else if (Math.abs(destPosition.getCol() - curPosition.getCol()) == 1
-                && destPosition.getRow() == curPosition.getRow() + direction) {
-            Piece pieceByPosition = board.getPieceByPosition(destPosition);
-            return nonNull(pieceByPosition) && !pieceByPosition.getColor().equals(getColor());
+        if (destPosition.getCol() == curPosition.getCol() && destPosition.getRow() == oneStepRow) {
+            return !board.pieceExistsAt(destPosition);
         }
+
+        if (((curPosition.getRow() == 1 && getColor() == Color.WHITE) || (curPosition.getRow() == 6 && getColor() == Color.BLACK))
+                && destPosition.getCol() == curPosition.getCol() && destPosition.getRow() == twoStepRow) {
+            return !board.pieceExistsAt(new Position(oneStepRow, curPosition.getCol())) && !board.pieceExistsAt(destPosition);
+        }
+
+
+        if (Math.abs(destPosition.getCol() - curPosition.getCol()) == 1 && destPosition.getRow() == oneStepRow) {
+            Piece pieceByPosition = board.getPieceByPosition(destPosition);
+            return nonNull(pieceByPosition) && pieceByPosition.getColor() != getColor();
+        }
+
         return false;
     }
 
@@ -54,14 +55,14 @@ public class Pawn extends Piece {
             return;
         }
 
-        if (board.pieceExistsAt(destPosition) && !board.isPieceColor(destPosition, getColor())) {
+        if (board.pieceExistsAt(destPosition) && board.isPieceColor(destPosition, getColor())) {
             board.capture(destPosition);
         }
 
         setPosition(destPosition);
 
         if (shouldPromote()) {
-            promote(new Scanner(System.in));
+            promote();
         }
     }
 
@@ -72,15 +73,14 @@ public class Pawn extends Piece {
 
     @Override
     public String getSymbol() {
-        return getColor().equals(Color.BLACK) ? "♟" : "♙";
+        return getColor() == Color.BLACK ? "♟" : "♙";
     }
 
-    private void promote(Scanner scanner) {
+    private void promote() {
         System.out.println("Choose a new piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
         String promotionChoice = String.valueOf(scanner.next().toUpperCase().charAt(0));
 
-        List<String> types = List.of(QUEEN.getName(), ROOK.getName(), BISHOP.getName(), KNIGHT.getName());
-        while (!types.contains(promotionChoice)) {
+        while (!PROMOTION_TYPES.contains(promotionChoice)) {
             System.out.println("Choose correct piece (Q - Queen, R - Rook, B - Bishop, N - Knight): ");
             promotionChoice = String.valueOf(scanner.next().toUpperCase().charAt(0));
         }
@@ -93,12 +93,11 @@ public class Pawn extends Piece {
             case ROOK -> pieces.add(new Rook(getBoard(), getColor(), getPosition()));
             case BISHOP -> pieces.add(new Bishop(getBoard(), getColor(), getPosition()));
             case KNIGHT -> pieces.add(new Knight(getBoard(), getColor(), getPosition()));
-            default -> System.out.println("Incorrect promotion choice");
+            default -> throw new IllegalStateException("Unexpected promotion choice: " + promotionChoice);
         }
     }
 
     private boolean shouldPromote() {
-        return (getColor().equals(Color.WHITE) && getPosition().getRow() == 7) ||
-                (getColor().equals(Color.BLACK) && getPosition().getRow() == 0);
+        return (getColor() == Color.WHITE && getPosition().getRow() == 7) || (getColor() == Color.BLACK && getPosition().getRow() == 0);
     }
 }

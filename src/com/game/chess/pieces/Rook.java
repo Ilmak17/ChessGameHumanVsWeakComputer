@@ -12,10 +12,6 @@ public class Rook extends SlidingPiece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (Boolean.TRUE.equals(getCaptured())) {
-            return false;
-        }
-
         return isValidLinearMove(destPosition);
     }
 
@@ -26,6 +22,6 @@ public class Rook extends SlidingPiece {
 
     @Override
     public String getSymbol() {
-        return getColor().equals(Color.BLACK) ? "♜" : "♖";
+        return getColor() == Color.BLACK ? "♜" : "♖";
     }
 }

@@ -12,22 +12,7 @@ public class Queen extends SlidingPiece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (Boolean.TRUE.equals(getCaptured())) {
-            return false;
-        }
-
-        Position curPosition = getPosition();
-        int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
-        int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
-
-        boolean isDiagonalMove = dCol == dRow;
-        boolean isStraightMove = dCol == 0 || dRow == 0;
-
-        if (!isDiagonalMove && !isStraightMove) {
-            return false;
-        }
-
-        return isDiagonalMove ? isValidDiagonalMove(destPosition) : isValidLinearMove(destPosition);
+        return isValidDiagonalMove(destPosition) || isValidLinearMove(destPosition);
     }
 
     @Override
@@ -37,7 +22,6 @@ public class Queen extends SlidingPiece {
 
     @Override
     public String getSymbol() {
-        return getColor().equals(Color.BLACK) ? "♛" : "♕";
+        return getColor() == Color.BLACK ? "♛" : "♕";
     }
 }
-

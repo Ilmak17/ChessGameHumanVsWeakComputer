@@ -17,13 +17,10 @@ public class VisualImpl implements Visual {
 
     public void print() {
         System.out.println("   a  b  c  d  e  f  g  h");
-
         for (int row = 7; row >= 0; row--) {
             System.out.print((row + 1) + " ");
-
             for (int col = 0; col < 8; col++) {
                 Piece piece = board.getPieceByPosition(new Position(row, col));
-
                 String backgroundColor = (row + col) % 2 == 0 ? "48;5;252" : "48;5;110";
 
                 if (isNull(piece)) {
@@ -36,8 +33,6 @@ public class VisualImpl implements Visual {
             }
             System.out.println();
         }
-
         System.out.println("   a  b  c  d  e  f  g  h");
     }
-
 }

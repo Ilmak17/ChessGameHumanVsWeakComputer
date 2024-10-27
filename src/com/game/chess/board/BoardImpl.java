@@ -11,7 +11,6 @@ import com.game.chess.pieces.Rook;
 import com.game.chess.pieces.enums.Color;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.game.chess.pieces.enums.Color.BLACK;
@@ -43,20 +42,19 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean isPieceColor(Position position, Color color) {
-        return getPieceByPosition(position).getColor().equals(color);
+        Piece piece = getPieceByPosition(position);
+
+        return nonNull(piece) && piece.getColor().equals(color);
     }
 
     @Override
     public void capture(Position position) {
-        Iterator<Piece> iterator = pieces.iterator();
-        while (iterator.hasNext()) {
-            Piece piece = iterator.next();
+        pieces.forEach(piece -> {
             if (piece.getPosition().equals(position)) {
-                System.out.println("Killed: " + piece);
+                System.out.println("Captured: " + piece);
                 piece.setCaptured(true);
-                iterator.remove();
             }
-        }
+        });
     }
 
     @Override
@@ -66,9 +64,7 @@ public class BoardImpl implements Board {
                 .findFirst()
                 .orElse(null);
 
-        if (isNull(checkedKing)) {
-            return false;
-        }
+        if (isNull(checkedKing)) return false;
 
         Piece threateningPiece = pieces.stream()
                 .filter(piece -> !piece.getColor().equals(color) && piece.isValidMove(checkedKing.getPosition()))
@@ -76,8 +72,8 @@ public class BoardImpl implements Board {
                 .orElse(null);
 
         if (nonNull(threateningPiece)) {
-            threateningPieceIdx = pieces.indexOf(threateningPiece);
             checkingKingIdx = pieces.indexOf(checkedKing);
+            threateningPieceIdx = pieces.indexOf(threateningPiece);
 
             return true;
         }

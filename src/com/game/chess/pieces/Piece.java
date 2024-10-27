@@ -6,10 +6,10 @@ import com.game.chess.board.Board;
 public abstract class Piece implements Movement {
 
     private Position position;
-    private Color color;
-    private Boolean isCaptured = Boolean.FALSE;
-    private Board board;
-    private boolean moved;
+    private final Color color;
+    private boolean isCaptured = false;
+    private final Board board;
+    private boolean moved = false;
 
     Piece(Board board, Color color, Position position) {
         this.board = board;
@@ -19,14 +19,18 @@ public abstract class Piece implements Movement {
 
     @Override
     public void move(Position position) {
-        if (board.pieceExistsAt(position)) return;
-
-        setPosition(position);
+        if (isCaptured) return;
+        if (isDestinationAvailable(position)) {
+            setPosition(position);
+            moved = true;
+        }
     }
 
     @Override
     public void forceMove(Position position) {
+        if (isCaptured) return;
         setPosition(position);
+        moved = true;
     }
 
     public abstract String getPieceType();
@@ -34,7 +38,7 @@ public abstract class Piece implements Movement {
     public abstract String getSymbol();
 
     protected boolean isDestinationAvailable(Position destPosition) {
-        return !getBoard().pieceExistsAt(destPosition) || !getBoard().isPieceColor(destPosition, getColor());
+        return !getBoard().pieceExistsAt(destPosition) || getBoard().isPieceColor(destPosition, getColor());
     }
 
     public Position getPosition() {
@@ -49,15 +53,11 @@ public abstract class Piece implements Movement {
         return color;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public Boolean getCaptured() {
+    public boolean isCaptured() {
         return isCaptured;
     }
 
-    public void setCaptured(Boolean captured) {
+    public void setCaptured(boolean captured) {
         isCaptured = captured;
     }
 
@@ -65,11 +65,7 @@ public abstract class Piece implements Movement {
         return board;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public boolean isMoved() {
+    public boolean hasMoved() {
         return moved;
     }
 

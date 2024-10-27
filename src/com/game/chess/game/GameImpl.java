@@ -13,6 +13,9 @@ import com.game.chess.game.input.InputHelper;
 import java.util.List;
 import java.util.Scanner;
 
+import static com.game.chess.game.input.InputHelper.DRAW;
+import static com.game.chess.game.input.InputHelper.MOVE;
+import static com.game.chess.game.input.InputHelper.SURRENDER;
 import static java.util.Objects.nonNull;
 
 public class GameImpl implements Game {
@@ -22,10 +25,6 @@ public class GameImpl implements Game {
     private boolean running;
     private boolean isWhiteTurn;
     private boolean drawOffered;
-
-    private static final String MOVE = "1";
-    private static final String DRAW = "2";
-    private static final String SURRENDER = "3";
 
     public GameImpl() {
         board = new BoardImpl();
@@ -48,7 +47,6 @@ public class GameImpl implements Game {
                 drawOffered = false;
             }
         }
-
         scanner.close();
     }
 
@@ -111,22 +109,18 @@ public class GameImpl implements Game {
 
         if (piece.isValidMove(targetPosition)) {
             if (!isMoveCausingCheckmate(piece, targetPosition)) {
-               Piece piece1 = pieces.get(selectedPieceIndex);
-               piece1.move(targetPosition);
-
+                pieces.get(selectedPieceIndex).move(targetPosition);
                 return true;
             }
             System.out.println("Your king is in check or will be after this move.");
+        } else {
+            System.out.println("Invalid move. Please try again.");
         }
-
-        System.out.println("Invalid move. Please try again.");
-
         return false;
     }
 
     private void giveUp() {
         System.out.println("The " + getColor() + " Player Gave up. End of the game...");
-
         running = false;
     }
 
@@ -135,26 +129,28 @@ public class GameImpl implements Game {
         if (board.isCheckmate(color) && !board.canPreventCheckmate()) {
             System.out.println("Check Mate! " + color);
             running = false;
-        }
-
-        if (board.isKingInCheck(color)) {
+        } else if (board.isKingInCheck(color)) {
             System.out.println("The " + color + " King is in check!");
         }
     }
 
     private boolean isMoveCausingCheckmate(Piece selectedPiece, Position targetPosition) {
         Position currentPosition = selectedPiece.getPosition();
-        boolean moveCreatesCheckmate;
-
         Piece capturedPiece = board.getPieceByPosition(targetPosition);
-        if (nonNull(capturedPiece)) capturedPiece.forceMove(new Position(8, 8));
+
+        if (nonNull(capturedPiece)) {
+            capturedPiece.setCaptured(true);
+            board.getPieces().remove(capturedPiece);
+        }
 
         selectedPiece.forceMove(targetPosition);
-        moveCreatesCheckmate = board.isCheckmate(getColor());
+        boolean moveCreatesCheckmate = board.isKingInCheck(getColor());
 
         selectedPiece.forceMove(currentPosition);
-
-        if (nonNull(capturedPiece)) capturedPiece.forceMove(targetPosition);
+        if (nonNull(capturedPiece)) {
+            capturedPiece.setCaptured(false);
+            board.getPieces().add(capturedPiece);
+        }
 
         return moveCreatesCheckmate;
     }
@@ -172,13 +168,11 @@ public class GameImpl implements Game {
 
     private String getInput(String val) {
         System.out.print(val);
-
         return scanner.next();
     }
 
     private boolean isCorrectColor(int pieceIndex) {
         List<Piece> pieces = board.getPieces();
-
         return (isWhiteTurn && pieces.get(pieceIndex).getColor() == Color.WHITE) ||
                 (!isWhiteTurn && pieces.get(pieceIndex).getColor() == Color.BLACK);
     }
@@ -186,7 +180,6 @@ public class GameImpl implements Game {
     private Position toPosition(String input) {
         char colChar = input.charAt(0);
         char rowChar = input.charAt(1);
-
         int col = InputHelper.returnCol(colChar);
         int row = InputHelper.returnRow(rowChar);
         return new Position(row, col);

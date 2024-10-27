@@ -18,10 +18,6 @@ public class King extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (Boolean.TRUE.equals(getCaptured())) {
-            return false;
-        }
-
         Position curPosition = getPosition();
         int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
         int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
@@ -36,20 +32,22 @@ public class King extends Piece {
     @Override
     public void move(Position destPosition) {
         if (canDoCastling(destPosition) && isValidMove(destPosition)) {
-            int kingNewCol = destPosition.getCol() > getPosition().getCol() ? 6 : 2;
-            int rookNewCol = destPosition.getCol() > getPosition().getCol() ? 5 : 3;
-            List<Piece> pieces = getBoard().getPieces();
-
-            forceMove(new Position(destPosition.getRow(), kingNewCol));
-            pieces.get(rookId).forceMove(new Position(destPosition.getRow(), rookNewCol));
-
-            setMoved(true);
-            pieces.get(rookId).setMoved(true);
-
+            performCastling(destPosition);
             return;
         }
-
         super.move(destPosition);
+    }
+
+    private void performCastling(Position destPosition) {
+        int kingNewCol = destPosition.getCol() > getPosition().getCol() ? 6 : 2;
+        int rookNewCol = destPosition.getCol() > getPosition().getCol() ? 5 : 3;
+        List<Piece> pieces = getBoard().getPieces();
+
+        forceMove(new Position(getPosition().getRow(), kingNewCol));
+        pieces.get(rookId).forceMove(new Position(getPosition().getRow(), rookNewCol));
+
+        setMoved(true);
+        pieces.get(rookId).setMoved(true);
     }
 
     @Override
@@ -59,7 +57,7 @@ public class King extends Piece {
 
     @Override
     public String getSymbol() {
-        return getColor().equals(Color.BLACK) ? "♚" : "♔";
+        return getColor() == Color.BLACK ? "♚" : "♔";
     }
 
     private boolean canDoCastling(Position destPosition) {
@@ -70,32 +68,41 @@ public class King extends Piece {
         }
 
         Position curPosition = getPosition();
-        int rookCol = (destPosition.getCol() > curPosition.getCol()) ? 7 : 0;
+        int rookCol = destPosition.getCol() > curPosition.getCol() ? 7 : 0;
         int rookRow = curPosition.getRow();
 
         Piece rook = board.getPieceByPosition(new Position(rookRow, rookCol));
-        if (isNull(rook) || !(rook instanceof Rook) || rook.isMoved() || rook.getColor() != getColor()) {
+        if (isNull(rook) || !(rook instanceof Rook) || rook.hasMoved() || rook.getColor() != getColor()) {
             return false;
         }
 
+        if (!isPathClear(curPosition, rookCol)) return false;
+
+        return !isPathUnderAttack(curPosition, destPosition, rook);
+    }
+
+    private boolean isPathClear(Position curPosition, int rookCol) {
         int minCol = Math.min(curPosition.getCol(), rookCol);
         int maxCol = Math.max(curPosition.getCol(), rookCol);
-        for (int i = minCol + 1; i < maxCol; i++) {
-            if (board.pieceExistsAt(new Position(curPosition.getRow(), i))) {
+        int row = curPosition.getRow();
+        for (int col = minCol + 1; col < maxCol; col++) {
+            if (getBoard().pieceExistsAt(new Position(row, col))) {
                 return false;
             }
         }
+        return true;
+    }
 
+    private boolean isPathUnderAttack(Position curPosition, Position destPosition, Piece rook) {
+        int row = curPosition.getRow();
         for (int col = curPosition.getCol(); col != destPosition.getCol();
              col += Integer.compare(destPosition.getCol(), curPosition.getCol())) {
-            if (board.isSquareUnderAttack(new Position(curPosition.getRow(), col), getColor())) {
+            if (getBoard().isSquareUnderAttack(new Position(row, col), getColor())) {
                 return false;
             }
         }
-
-        List<Piece> pieces = board.getPieces();
+        List<Piece> pieces = getBoard().getPieces();
         setRookId(pieces.indexOf(rook));
-
         return true;
     }
 

@@ -5,8 +5,13 @@ import com.game.chess.pieces.Position;
 
 import java.util.List;
 
-
 public class InputHelper {
+    public static final String MOVE = "1";
+    public static final String DRAW = "2";
+    public static final String SURRENDER = "3";
+
+    private InputHelper() {
+    }
 
     public static int returnCol(char character) {
         character = Character.toUpperCase(character);
