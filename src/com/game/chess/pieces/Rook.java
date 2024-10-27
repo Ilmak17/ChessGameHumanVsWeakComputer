@@ -22,6 +22,6 @@ public class Rook extends SlidingPiece {
 
     @Override
     public String getSymbol() {
-        return getColor().equals(Color.BLACK) ? "♜" : "♖";
+        return getColor() == Color.BLACK ? "♜" : "♖";
     }
 }
