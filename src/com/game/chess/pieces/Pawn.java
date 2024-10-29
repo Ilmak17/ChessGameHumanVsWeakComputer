@@ -55,7 +55,7 @@ public class Pawn extends Piece {
             return;
         }
 
-        if (board.pieceExistsAt(destPosition) && !board.isPieceColor(destPosition, getColor())) {
+        if (board.pieceExistsAt(destPosition) && board.isNotPieceColor(destPosition, getColor())) {
             board.capture(destPosition);
         }
 

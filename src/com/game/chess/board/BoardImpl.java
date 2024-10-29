@@ -8,7 +8,6 @@ import com.game.chess.pieces.Pawn;
 import com.game.chess.pieces.Piece;
 import com.game.chess.pieces.Queen;
 import com.game.chess.pieces.Rook;
-import com.game.chess.pieces.SlidingPiece;
 import com.game.chess.pieces.enums.Color;
 
 import java.util.ArrayList;
@@ -43,10 +42,10 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public boolean isPieceColor(Position position, Color color) {
+    public boolean isNotPieceColor(Position position, Color color) {
         Piece piece = getPieceByPosition(position);
 
-        return nonNull(piece) && piece.getColor().equals(color);
+        return nonNull(piece) && !piece.getColor().equals(color);
     }
 
     @Override
@@ -170,6 +169,8 @@ public class BoardImpl implements Board {
     private boolean canBlockThreat(Position kingPos, Position threatPos, Piece piece) {
         List<Position> blockingPositions = getBlockingPositions(kingPos, threatPos);
 
-        return blockingPositions.stream().anyMatch(piece::isValidMove);
+        return blockingPositions
+                .stream()
+                .anyMatch(piece::isValidMove);
     }
 }

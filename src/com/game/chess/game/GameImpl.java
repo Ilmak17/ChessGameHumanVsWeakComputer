@@ -13,7 +13,7 @@ import com.game.chess.game.input.InputHelper;
 import java.util.List;
 import java.util.Scanner;
 
-import static java.util.Objects.nonNull;
+import static java.util.Objects.isNull;
 
 public class GameImpl implements Game {
     private final Board board;
@@ -107,20 +107,17 @@ public class GameImpl implements Game {
     private boolean tryMove(SelectedPiece selectedPiece) {
         String input = getInput("Select a target field (Example E3): ");
         Position targetPosition = toPosition(input);
-        int selectedPieceIndex = selectedPiece.getSelectedPieceIndex();
-        List<Piece> pieces = board.getPieces();
-        Piece piece = pieces.get(selectedPieceIndex);
+        Piece piece = board.getPieceByPosition(selectedPiece.getPosition());
 
-        if (piece.isValidMove(targetPosition)) {
-            if (!isMoveCausingCheckmate(piece, targetPosition)) {
-                pieces.get(selectedPieceIndex).move(targetPosition);
-                return true;
-            }
-            System.out.println("Your king is in check or will be after this move.");
-        } else {
-            System.out.println("Invalid move. Please try again.");
+        if (isNull(piece)) {
+            System.out.println("No piece found at the selected position.");
+
+            return false;
         }
-        return false;
+
+        piece.move(targetPosition);
+
+        return true;
     }
 
     private void giveUp() {
@@ -133,26 +130,11 @@ public class GameImpl implements Game {
         if (board.isCheckmate(color)) {
             System.out.println("Check Mate! " + color + " Player loses.");
             running = false;
-        } else if (board.isKingInCheck(color)) {
+            return;
+        }
+        if (board.isKingInCheck(color)) {
             System.out.println("The " + color + " King is in check!");
         }
-    }
-
-    private boolean isMoveCausingCheckmate(Piece selectedPiece, Position targetPosition) {
-        Position currentPosition = selectedPiece.getPosition();
-        boolean moveCreatesCheckmate;
-
-        Piece capturedPiece = board.getPieceByPosition(targetPosition);
-        if (nonNull(capturedPiece)) capturedPiece.forceMove(new Position(8, 8));
-
-        selectedPiece.forceMove(targetPosition);
-        moveCreatesCheckmate = board.isCheckmate(getColor());
-
-        selectedPiece.forceMove(currentPosition);
-
-        if (nonNull(capturedPiece)) capturedPiece.forceMove(targetPosition);
-
-        return moveCreatesCheckmate;
     }
 
     private SelectedPiece getSelectedPiece() {

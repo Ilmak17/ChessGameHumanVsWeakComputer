@@ -8,11 +8,18 @@ import java.util.List;
 
 public interface Board {
     Piece getPieceByPosition(Position position);
+
     List<Piece> getPieces();
+
     boolean pieceExistsAt(Position position);
-    boolean isPieceColor(Position position, Color color);
+
+    boolean isNotPieceColor(Position position, Color color);
+
     void capture(Position position);
+
     boolean isKingInCheck(Color color);
+
     boolean isSquareUnderAttack(Position position, Color color);
+
     boolean isCheckmate(Color color);
 }

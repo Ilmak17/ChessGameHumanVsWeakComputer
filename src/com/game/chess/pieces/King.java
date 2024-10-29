@@ -60,6 +60,7 @@ public class King extends Piece {
         Position curPosition = getPosition();
         int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
         int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
+
         return dCol <= 1 && dRow <= 1;
     }
 

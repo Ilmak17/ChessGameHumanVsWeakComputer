@@ -21,20 +21,28 @@ public abstract class Piece implements Movement {
 
     @Override
     public void move(Position position) {
-        if (Boolean.TRUE.equals(isCaptured) || !isValidMove(position)) {
-            throw new IllegalArgumentException("Invalid move: Piece is captured or move is invalid. Please try again.");
-        }
+        validateMove(position);
 
-        if (isMoveLeavingKingInCheck(position)) {
-            throw new IllegalArgumentException("Invalid move: King would be in check. Please try again.");
-        }
-
-        if (board.pieceExistsAt(position) && !board.isPieceColor(position, getColor())) {
+        if (board.pieceExistsAt(position) && board.isNotPieceColor(position, getColor())) {
             board.capture(position);
         }
 
         setPosition(position);
         setMoved(true);
+    }
+
+    private void validateMove(Position position) {
+        if (Boolean.TRUE.equals(isCaptured)) {
+            throw new IllegalArgumentException("Invalid move: Piece is captured. Please try again.");
+        }
+
+        if (!isValidMove(position)) {
+            throw new IllegalArgumentException("Invalid move: Piece move is invalid. Please try again.");
+        }
+
+        if (isMoveLeavingKingInCheck(position)) {
+            throw new IllegalArgumentException("Invalid move: Piece move is in check. Please try again.");
+        }
     }
 
     @Override
@@ -57,9 +65,7 @@ public abstract class Piece implements Movement {
     private boolean isMoveLeavingKingInCheck(Position position) {
         Position originalPosition = getPosition();
         Piece capturedPiece = executeTemporaryMove(position);
-
         boolean kingInCheck = board.isKingInCheck(getColor());
-
         revertTemporaryMove(originalPosition, capturedPiece);
 
         return kingInCheck;
@@ -67,7 +73,7 @@ public abstract class Piece implements Movement {
 
     private Piece executeTemporaryMove(Position position) {
         Piece capturedPiece = null;
-        if (board.pieceExistsAt(position) && !board.isPieceColor(position, getColor())) {
+        if (board.pieceExistsAt(position) && board.isNotPieceColor(position, getColor())) {
             capturedPiece = board.getPieceByPosition(position);
             capturedPiece.setCaptured(true);
             board.getPieces().remove(capturedPiece);

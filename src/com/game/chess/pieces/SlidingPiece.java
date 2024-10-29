@@ -14,7 +14,7 @@ public abstract class SlidingPiece extends Piece {
     }
 
     protected boolean isValidDiagonalMove(Position destPosition) {
-        return isValidDiagonalMove(destPosition) && isPathClear(destPosition) && isDestinationAvailable(destPosition);
+        return isMovingDiagonally(destPosition) && isPathClear(destPosition) && isDestinationAvailable(destPosition);
     }
 
     protected boolean isPathClear(Position destPosition) {
