@@ -16,6 +16,11 @@ public class Bishop extends SlidingPiece {
     }
 
     @Override
+    public boolean canAttack(Position destPosition) {
+        return isMovingDiagonally(destPosition);
+    }
+
+    @Override
     public String getPieceType() {
         return PieceType.BISHOP.getName();
     }

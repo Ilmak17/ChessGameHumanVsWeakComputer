@@ -22,11 +22,15 @@ public abstract class Piece implements Movement {
     @Override
     public void move(Position position) {
         if (Boolean.TRUE.equals(isCaptured) || !isValidMove(position)) {
-            return;
+            throw new IllegalArgumentException("Invalid move: Piece is captured or move is invalid. Please try again.");
+        }
+
+        if (isMoveLeavingKingInCheck(position)) {
+            throw new IllegalArgumentException("Invalid move: King would be in check. Please try again.");
         }
 
         if (board.pieceExistsAt(position) && !board.isPieceColor(position, getColor())) {
-            getBoard().capture(position);
+            board.capture(position);
         }
 
         setPosition(position);
@@ -38,6 +42,8 @@ public abstract class Piece implements Movement {
         setPosition(position);
     }
 
+    public abstract boolean canAttack(Position destPosition);
+
     public abstract String getPieceType();
 
     public abstract String getSymbol();
@@ -46,6 +52,36 @@ public abstract class Piece implements Movement {
         Piece targetPiece = board.getPieceByPosition(destPosition);
 
         return isNull(targetPiece) || !targetPiece.getColor().equals(getColor());
+    }
+
+    private boolean isMoveLeavingKingInCheck(Position position) {
+        Position originalPosition = getPosition();
+        Piece capturedPiece = executeTemporaryMove(position);
+
+        boolean kingInCheck = board.isKingInCheck(getColor());
+
+        revertTemporaryMove(originalPosition, capturedPiece);
+
+        return kingInCheck;
+    }
+
+    private Piece executeTemporaryMove(Position position) {
+        Piece capturedPiece = null;
+        if (board.pieceExistsAt(position) && !board.isPieceColor(position, getColor())) {
+            capturedPiece = board.getPieceByPosition(position);
+            capturedPiece.setCaptured(true);
+            board.getPieces().remove(capturedPiece);
+        }
+        setPosition(position);
+        return capturedPiece;
+    }
+
+    private void revertTemporaryMove(Position originalPosition, Piece capturedPiece) {
+        setPosition(originalPosition);
+        if (capturedPiece != null) {
+            capturedPiece.setCaptured(false);
+            board.getPieces().add(capturedPiece);
+        }
     }
 
     public Position getPosition() {

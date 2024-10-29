@@ -12,12 +12,12 @@ public class Knight extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        Position curPosition = getPosition();
-        int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
-        int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
-        boolean isValidKnightMove = (dCol == 1 && dRow == 2) || (dCol == 2 && dRow == 1);
+        return isDestinationAvailable(destPosition) && isValidKnightMove(destPosition);
+    }
 
-        return isDestinationAvailable(destPosition) && isValidKnightMove;
+    @Override
+    public boolean canAttack(Position destPosition) {
+        return isValidKnightMove(destPosition);
     }
 
     @Override
@@ -28,5 +28,13 @@ public class Knight extends Piece {
     @Override
     public String getSymbol() {
         return getColor().equals(Color.BLACK) ? "♞" : "♘";
+    }
+
+    private boolean isValidKnightMove(Position destPosition) {
+        Position curPosition = getPosition();
+        int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
+        int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
+
+        return (dCol == 1 && dRow == 2) || (dCol == 2 && dRow == 1);
     }
 }

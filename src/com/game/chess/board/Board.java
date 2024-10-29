@@ -14,6 +14,5 @@ public interface Board {
     void capture(Position position);
     boolean isKingInCheck(Color color);
     boolean isSquareUnderAttack(Position position, Color color);
-    boolean canPreventCheckmate();
     boolean isCheckmate(Color color);
 }

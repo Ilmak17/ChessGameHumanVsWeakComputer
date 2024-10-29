@@ -14,7 +14,8 @@ import static com.game.chess.pieces.enums.PieceType.ROOK;
 import static java.util.Objects.nonNull;
 
 public class Pawn extends Piece {
-    private static final List<String> PROMOTION_TYPES = List.of(QUEEN.getName(), ROOK.getName(), BISHOP.getName(), KNIGHT.getName());
+    private static final List<String> PROMOTION_TYPES =
+            List.of(QUEEN.getName(), ROOK.getName(), BISHOP.getName(), KNIGHT.getName());
 
     public Pawn(Board board, Color color, Position position) {
         super(board, color, position);
@@ -46,7 +47,6 @@ public class Pawn extends Piece {
         return false;
     }
 
-
     @Override
     public void move(Position destPosition) {
         Board board = getBoard();
@@ -59,11 +59,21 @@ public class Pawn extends Piece {
             board.capture(destPosition);
         }
 
-        setPosition(destPosition);
+        forceMove(destPosition);
 
         if (shouldPromote()) {
             promote(new Scanner(System.in));
         }
+    }
+
+    @Override
+    public boolean canAttack(Position destPosition) {
+        Position curPosition = getPosition();
+        int direction = getColor().equals(Color.WHITE) ? 1 : -1;
+        int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
+        int dRow = destPosition.getRow() - curPosition.getRow();
+
+        return dCol == 1 && dRow == direction;
     }
 
     @Override
@@ -93,7 +103,7 @@ public class Pawn extends Piece {
             case ROOK -> pieces.add(new Rook(getBoard(), getColor(), getPosition()));
             case BISHOP -> pieces.add(new Bishop(getBoard(), getColor(), getPosition()));
             case KNIGHT -> pieces.add(new Knight(getBoard(), getColor(), getPosition()));
-            default -> System.out.println("Incorrect promotion choice");
+            default -> throw new IllegalArgumentException("Incorrect promotion choice");
         }
     }
 

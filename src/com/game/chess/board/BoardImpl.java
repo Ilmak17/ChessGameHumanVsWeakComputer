@@ -8,6 +8,7 @@ import com.game.chess.pieces.Pawn;
 import com.game.chess.pieces.Piece;
 import com.game.chess.pieces.Queen;
 import com.game.chess.pieces.Rook;
+import com.game.chess.pieces.SlidingPiece;
 import com.game.chess.pieces.enums.Color;
 
 import java.util.ArrayList;
@@ -91,31 +92,31 @@ public class BoardImpl implements Board {
     public boolean isSquareUnderAttack(Position position, Color color) {
         return pieces.stream()
                 .filter(piece -> !piece.getColor().equals(color))
-                .anyMatch(piece -> piece.isValidMove(position));
-    }
-
-    @Override
-    public boolean canPreventCheckmate() {
-        Piece threateningPiece = pieces.get(threateningPieceIdx);
-
-        return pieces.stream()
-                .filter(piece -> !piece.getColor().equals(threateningPiece.getColor()))
-                .anyMatch(piece -> piece.isValidMove(threateningPiece.getPosition()));
+                .anyMatch(piece -> piece.canAttack(position));
     }
 
     @Override
     public boolean isCheckmate(Color color) {
         if (!isKingInCheck(color)) return false;
 
-        for (int col = 0; col <= 7; col++) {
-            for (int row = 0; row <= 7; row++) {
-                if (pieces.get(checkingKingIdx).isValidMove(new Position(row, col))) {
+        Piece king = pieces.get(checkingKingIdx);
+
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Position potentialPosition = new Position(row, col);
+                if (king.isValidMove(potentialPosition)) {
                     return false;
                 }
             }
         }
 
-        return true;
+        Piece threateningPiece = pieces.get(threateningPieceIdx);
+        return pieces.stream()
+                .filter(piece -> piece.getColor() == color && !(piece instanceof King))
+                .noneMatch(piece ->
+                        piece.isValidMove(threateningPiece.getPosition()) ||
+                                canBlockThreat(king.getPosition(), threateningPiece.getPosition(), piece)
+                );
     }
 
     @Override
@@ -146,5 +147,29 @@ public class BoardImpl implements Board {
         pieces.add(new Bishop(this, BLACK, new Position(7, 5)));
         pieces.add(new Knight(this, BLACK, new Position(7, 6)));
         pieces.add(new Rook(this, BLACK, new Position(7, 7)));
+    }
+
+    private List<Position> getBlockingPositions(Position kingPos, Position threatPos) {
+        List<Position> blockingPositions = new ArrayList<>();
+
+        int rowDirection = Integer.compare(threatPos.getRow(), kingPos.getRow());
+        int colDirection = Integer.compare(threatPos.getCol(), kingPos.getCol());
+
+        int currentRow = kingPos.getRow() + rowDirection;
+        int currentCol = kingPos.getCol() + colDirection;
+
+        while (currentRow != threatPos.getRow() || currentCol != threatPos.getCol()) {
+            blockingPositions.add(new Position(currentRow, currentCol));
+            currentRow += rowDirection;
+            currentCol += colDirection;
+        }
+
+        return blockingPositions;
+    }
+
+    private boolean canBlockThreat(Position kingPos, Position threatPos, Piece piece) {
+        List<Position> blockingPositions = getBlockingPositions(kingPos, threatPos);
+
+        return blockingPositions.stream().anyMatch(piece::isValidMove);
     }
 }

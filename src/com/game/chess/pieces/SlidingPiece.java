@@ -14,14 +14,10 @@ public abstract class SlidingPiece extends Piece {
     }
 
     protected boolean isValidDiagonalMove(Position destPosition) {
-        Position curPosition = getPosition();
-        int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
-        int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
-
-        return dCol == dRow && isPathClear(destPosition) && isDestinationAvailable(destPosition);
+        return isValidDiagonalMove(destPosition) && isPathClear(destPosition) && isDestinationAvailable(destPosition);
     }
 
-    private boolean isPathClear(Position destPosition) {
+    protected boolean isPathClear(Position destPosition) {
         Position curPosition = getPosition();
         int stepCol = Integer.compare(destPosition.getCol(), curPosition.getCol());
         int stepRow = Integer.compare(destPosition.getRow(), curPosition.getRow());
@@ -39,8 +35,16 @@ public abstract class SlidingPiece extends Piece {
         return true;
     }
 
-    private boolean isMovingInLine(Position destPosition) {
+    protected boolean isMovingInLine(Position destPosition) {
         Position curPosition = getPosition();
         return destPosition.getCol() == curPosition.getCol() || destPosition.getRow() == curPosition.getRow();
+    }
+
+    protected boolean isMovingDiagonally(Position destPosition) {
+        Position curPosition = getPosition();
+        int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
+        int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
+
+        return dCol == dRow;
     }
 }

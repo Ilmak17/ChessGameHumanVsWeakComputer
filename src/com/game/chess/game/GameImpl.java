@@ -41,8 +41,8 @@ public class GameImpl implements Game {
         while (running) {
             visual.print();
             System.out.println("Turn of: " + (isWhiteTurn ? "White Player" : "Black Player"));
-            String choice = getOption();
-            handleChoice(choice);
+//            String choice = getOption();
+            handleChoice("1");
 
             if (running) {
                 drawOffered = false;
@@ -82,6 +82,8 @@ public class GameImpl implements Game {
                 }
 
                 successful = tryMove(pieceSelection);
+            } catch (IllegalArgumentException ex) {
+                System.out.println(ex.getMessage());
             } catch (Exception e) {
                 System.out.println("Piece not found or incorrect input. Please Try again.");
             }
@@ -128,8 +130,8 @@ public class GameImpl implements Game {
 
     private void getGameState() {
         Color color = getColor();
-        if (board.isCheckmate(color) && !board.canPreventCheckmate()) {
-            System.out.println("Check Mate! " + color);
+        if (board.isCheckmate(color)) {
+            System.out.println("Check Mate! " + color + " Player loses.");
             running = false;
         } else if (board.isKingInCheck(color)) {
             System.out.println("The " + color + " King is in check!");

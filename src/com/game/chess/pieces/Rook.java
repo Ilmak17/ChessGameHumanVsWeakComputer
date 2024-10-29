@@ -16,6 +16,11 @@ public class Rook extends SlidingPiece {
     }
 
     @Override
+    public boolean canAttack(Position destPosition) {
+        return isMovingInLine(destPosition);
+    }
+
+    @Override
     public String getPieceType() {
         return PieceType.ROOK.getName();
     }

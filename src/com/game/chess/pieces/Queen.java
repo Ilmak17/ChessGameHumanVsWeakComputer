@@ -27,6 +27,11 @@ public class Queen extends SlidingPiece {
     }
 
     @Override
+    public boolean canAttack(Position destPosition) {
+        return isMovingInLine(destPosition) || isMovingDiagonally(destPosition);
+    }
+
+    @Override
     public String getPieceType() {
         return PieceType.QUEEN.getName();
     }
