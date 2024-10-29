@@ -4,6 +4,7 @@ import com.game.chess.pieces.enums.Color;
 import com.game.chess.board.Board;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 public abstract class Piece implements Movement {
 
@@ -66,7 +67,12 @@ public abstract class Piece implements Movement {
         Position originalPosition = getPosition();
         Piece capturedPiece = executeTemporaryMove(position);
         boolean kingInCheck = board.isKingInCheck(getColor());
-        revertTemporaryMove(originalPosition, capturedPiece);
+
+        forceMove(originalPosition);
+        if (nonNull(capturedPiece)) {
+            capturedPiece.setCaptured(false);
+            board.getPieces().add(capturedPiece);
+        }
 
         return kingInCheck;
     }
@@ -78,16 +84,9 @@ public abstract class Piece implements Movement {
             capturedPiece.setCaptured(true);
             board.getPieces().remove(capturedPiece);
         }
-        setPosition(position);
-        return capturedPiece;
-    }
+        forceMove(position);
 
-    private void revertTemporaryMove(Position originalPosition, Piece capturedPiece) {
-        setPosition(originalPosition);
-        if (capturedPiece != null) {
-            capturedPiece.setCaptured(false);
-            board.getPieces().add(capturedPiece);
-        }
+        return capturedPiece;
     }
 
     public Position getPosition() {

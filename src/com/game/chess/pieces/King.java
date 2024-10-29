@@ -93,14 +93,8 @@ public class King extends Piece {
         int minCol = Math.min(curPosition.getCol(), rookCol);
         int maxCol = Math.max(curPosition.getCol(), rookCol);
         for (int i = minCol + 1; i < maxCol; i++) {
-            if (board.pieceExistsAt(new Position(curPosition.getRow(), i))) {
-                return false;
-            }
-        }
-
-        for (int col = curPosition.getCol(); col != destPosition.getCol();
-             col += Integer.compare(destPosition.getCol(), curPosition.getCol())) {
-            if (board.isSquareUnderAttack(new Position(curPosition.getRow(), col), getColor())) {
+            Position positionBetween = new Position(curPosition.getRow(), i);
+            if (board.pieceExistsAt(positionBetween) || board.isSquareUnderAttack(positionBetween, getColor())) {
                 return false;
             }
         }

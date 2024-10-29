@@ -103,19 +103,18 @@ public class BoardImpl implements Board {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 Position potentialPosition = new Position(row, col);
-                if (king.isValidMove(potentialPosition)) {
+                if (king.isValidMove(potentialPosition) && !isSquareUnderAttack(potentialPosition, color)) {
                     return false;
                 }
             }
         }
 
         Piece threateningPiece = pieces.get(threateningPieceIdx);
+
         return pieces.stream()
                 .filter(piece -> piece.getColor() == color && !(piece instanceof King))
-                .noneMatch(piece ->
-                        piece.isValidMove(threateningPiece.getPosition()) ||
-                                canBlockThreat(king.getPosition(), threateningPiece.getPosition(), piece)
-                );
+                .noneMatch(piece -> piece.isValidMove(threateningPiece.getPosition()) ||
+                        canBlockThreat(king.getPosition(), threateningPiece.getPosition(), piece));
     }
 
     @Override
