@@ -10,11 +10,11 @@ public abstract class SlidingPiece extends Piece {
     }
 
     protected boolean isValidLinearMove(Position destPosition) {
-        return isMovingInLine(destPosition) && isPathClear(destPosition) && isDestinationAvailable(destPosition);
+        return isMovingInLine(destPosition) && isPathClear(destPosition);
     }
 
     protected boolean isValidDiagonalMove(Position destPosition) {
-        return isMovingDiagonally(destPosition) && isPathClear(destPosition) && isDestinationAvailable(destPosition);
+        return isMovingDiagonally(destPosition) && isPathClear(destPosition);
     }
 
     protected boolean isPathClear(Position destPosition) {
@@ -36,8 +36,8 @@ public abstract class SlidingPiece extends Piece {
     }
 
     protected boolean isMovingInLine(Position destPosition) {
-        Position curPosition = getPosition();
-        return destPosition.getCol() == curPosition.getCol() || destPosition.getRow() == curPosition.getRow();
+        return destPosition.getCol() == getPosition().getCol()
+                || destPosition.getRow() == getPosition().getRow();
     }
 
     protected boolean isMovingDiagonally(Position destPosition) {

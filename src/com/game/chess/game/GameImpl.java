@@ -110,7 +110,12 @@ public class GameImpl implements Game {
         Piece piece = board.getPieceByPosition(selectedPiece.getPosition());
 
         if (isNull(piece)) {
-            System.out.println("No piece found at the selected position.");
+            System.out.println("Invalid move: No piece found at the selected position.");
+
+            return false;
+        }
+        if (board.isMoveLeavingKingInCheck(piece, targetPosition)) {
+            System.out.println("Invalid move: Piece move is in check. Please try again.");
 
             return false;
         }

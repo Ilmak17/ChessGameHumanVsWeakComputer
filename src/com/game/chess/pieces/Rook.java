@@ -12,12 +12,15 @@ public class Rook extends SlidingPiece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        return isValidLinearMove(destPosition);
+        return isValidLinearMove(destPosition) && isDestinationAvailable(destPosition);
     }
 
     @Override
     public boolean canAttack(Position destPosition) {
-        return isMovingInLine(destPosition);
+        if (destPosition == getPosition()) {
+            return false;
+        }
+        return isValidLinearMove(destPosition);
     }
 
     @Override

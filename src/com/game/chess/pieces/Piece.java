@@ -4,7 +4,6 @@ import com.game.chess.pieces.enums.Color;
 import com.game.chess.board.Board;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 public abstract class Piece implements Movement {
 
@@ -32,7 +31,15 @@ public abstract class Piece implements Movement {
         setMoved(true);
     }
 
-    private void validateMove(Position position) {
+    @Override
+    public void forceMove(Position position) {
+        setPosition(position);
+    }
+
+    protected void validateMove(Position position) {
+        if (getPosition().equals(position)) {
+            throw new IllegalArgumentException("Invalid move: Position cannot be the same as the current position");
+        }
         if (Boolean.TRUE.equals(isCaptured)) {
             throw new IllegalArgumentException("Invalid move: Piece is captured. Please try again.");
         }
@@ -40,15 +47,6 @@ public abstract class Piece implements Movement {
         if (!isValidMove(position)) {
             throw new IllegalArgumentException("Invalid move: Piece move is invalid. Please try again.");
         }
-
-        if (isMoveLeavingKingInCheck(position)) {
-            throw new IllegalArgumentException("Invalid move: Piece move is in check. Please try again.");
-        }
-    }
-
-    @Override
-    public void forceMove(Position position) {
-        setPosition(position);
     }
 
     public abstract boolean canAttack(Position destPosition);
@@ -61,32 +59,6 @@ public abstract class Piece implements Movement {
         Piece targetPiece = board.getPieceByPosition(destPosition);
 
         return isNull(targetPiece) || !targetPiece.getColor().equals(getColor());
-    }
-
-    private boolean isMoveLeavingKingInCheck(Position position) {
-        Position originalPosition = getPosition();
-        Piece capturedPiece = executeTemporaryMove(position);
-        boolean kingInCheck = board.isKingInCheck(getColor());
-
-        forceMove(originalPosition);
-        if (nonNull(capturedPiece)) {
-            capturedPiece.setCaptured(false);
-            board.getPieces().add(capturedPiece);
-        }
-
-        return kingInCheck;
-    }
-
-    private Piece executeTemporaryMove(Position position) {
-        Piece capturedPiece = null;
-        if (board.pieceExistsAt(position) && board.isNotPieceColor(position, getColor())) {
-            capturedPiece = board.getPieceByPosition(position);
-            capturedPiece.setCaptured(true);
-            board.getPieces().remove(capturedPiece);
-        }
-        forceMove(position);
-
-        return capturedPiece;
     }
 
     public Position getPosition() {

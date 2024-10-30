@@ -22,4 +22,8 @@ public interface Board {
     boolean isSquareUnderAttack(Position position, Color color);
 
     boolean isCheckmate(Color color);
+
+    boolean isMoveLeavingKingInCheck(Piece piece, Position position);
+
+    Piece getThreatingPiece(Color color);
 }

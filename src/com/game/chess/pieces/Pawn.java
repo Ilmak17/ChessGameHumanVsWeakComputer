@@ -23,6 +23,9 @@ public class Pawn extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
+        if (getPosition() == destPosition) {
+            return false;
+        }
         Board board = getBoard();
         Position curPosition = getPosition();
         int direction = getColor().equals(Color.WHITE) ? 1 : -1;
@@ -50,10 +53,7 @@ public class Pawn extends Piece {
     @Override
     public void move(Position destPosition) {
         Board board = getBoard();
-
-        if (!isValidMove(destPosition)) {
-            return;
-        }
+        validateMove(destPosition);
 
         if (board.pieceExistsAt(destPosition) && board.isNotPieceColor(destPosition, getColor())) {
             board.capture(destPosition);
