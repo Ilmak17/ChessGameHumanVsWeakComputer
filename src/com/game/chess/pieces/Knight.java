@@ -12,17 +12,13 @@ public class Knight extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (getPosition() == destPosition) {
-            return false;
-        }
         return isDestinationAvailable(destPosition) && isValidKnightMove(destPosition);
     }
 
     @Override
     public boolean canAttack(Position destPosition) {
-        if (getPosition() == destPosition) {
-            return false;
-        }
+        if (getPosition() == destPosition) return false;
+
         return isValidKnightMove(destPosition);
     }
 

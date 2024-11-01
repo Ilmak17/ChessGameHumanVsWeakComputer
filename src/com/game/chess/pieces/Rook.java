@@ -17,9 +17,6 @@ public class Rook extends SlidingPiece {
 
     @Override
     public boolean canAttack(Position destPosition) {
-        if (destPosition == getPosition()) {
-            return false;
-        }
         return isValidLinearMove(destPosition);
     }
 

@@ -10,10 +10,14 @@ public abstract class SlidingPiece extends Piece {
     }
 
     protected boolean isValidLinearMove(Position destPosition) {
+        if (getPosition() == destPosition) return false;
+
         return isMovingInLine(destPosition) && isPathClear(destPosition);
     }
 
     protected boolean isValidDiagonalMove(Position destPosition) {
+        if (getPosition() == destPosition) return false;
+
         return isMovingDiagonally(destPosition) && isPathClear(destPosition);
     }
 

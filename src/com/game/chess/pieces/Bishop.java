@@ -12,17 +12,11 @@ public class Bishop extends SlidingPiece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (getPosition() == destPosition) {
-            return false;
-        }
         return isValidDiagonalMove(destPosition) && isDestinationAvailable(destPosition);
     }
 
     @Override
     public boolean canAttack(Position destPosition) {
-        if (destPosition == getPosition()) {
-            return false;
-        }
         return isValidDiagonalMove(destPosition);
     }
 

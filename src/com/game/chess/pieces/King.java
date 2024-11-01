@@ -41,7 +41,9 @@ public class King extends Piece {
 
     @Override
     public void move(Position destPosition) {
-        if (canDoCastling(destPosition) && isValidMove(destPosition)) {
+        if (canDoCastling(destPosition)) {
+            validateMove(destPosition);
+
             int kingNewCol = destPosition.getCol() > getPosition().getCol() ? 6 : 2;
             int rookNewCol = destPosition.getCol() > getPosition().getCol() ? 5 : 3;
             List<Piece> pieces = getBoard().getPieces();
@@ -60,9 +62,8 @@ public class King extends Piece {
 
     @Override
     public boolean canAttack(Position destPosition) {
-        if (getPosition() == destPosition) {
-            return false;
-        }
+        if (getPosition() == destPosition) return false;
+
         Position curPosition = getPosition();
         int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
         int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());

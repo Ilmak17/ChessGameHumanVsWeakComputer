@@ -26,6 +26,7 @@ public class GameImpl implements Game {
     private static final String MOVE = "1";
     private static final String DRAW = "2";
     private static final String SURRENDER = "3";
+    private static final String ACCEPT_DRAW = "yes";
 
     public GameImpl() {
         board = new BoardImpl();
@@ -41,21 +42,17 @@ public class GameImpl implements Game {
         while (running) {
             visual.print();
             System.out.println("Turn of: " + (isWhiteTurn ? "White Player" : "Black Player"));
-//            String choice = getOption();
-            handleChoice("1");
-
-            if (running) {
-                drawOffered = false;
-            }
+            String choice = getOption();
+            handleChoice(choice);
         }
-
+        visual.print();
         scanner.close();
     }
 
     private String getOption() {
         System.out.println("Choose option:");
-        System.out.println("1. Move");
-        System.out.println("2. Offer / Accept a draw");
+        System.out.println("1. Make a move");
+        System.out.println("2. Offer a draw");
         System.out.println("3. Give up");
 
         return scanner.next();
@@ -77,7 +74,7 @@ public class GameImpl implements Game {
             try {
                 SelectedPiece pieceSelection = getSelectedPiece();
                 if (!isCorrectColor(pieceSelection.getSelectedPieceIndex())) {
-                    System.out.println("Wrong color selected. Turn is for: " + getColor());
+                    System.out.println("Invalid move: Wrong color selected. Turn is for: " + getColor());
                     return;
                 }
 
@@ -85,7 +82,7 @@ public class GameImpl implements Game {
             } catch (IllegalArgumentException ex) {
                 System.out.println(ex.getMessage());
             } catch (Exception e) {
-                System.out.println("Piece not found or incorrect input. Please Try again.");
+                System.out.println("Invalid move: Piece not found or incorrect input. Please Try again.");
             }
         }
 
@@ -94,13 +91,22 @@ public class GameImpl implements Game {
     }
 
     private void offerDraw() {
-        if (drawOffered) {
+        drawOffered = true;
+        System.out.println("A draw was offered.");
+        updateTurn();
+        confirmDraw();
+    }
+
+    private void confirmDraw() {
+        System.out.println("Your opponent offered a draw. Do you accept? (yes/no)");
+        String response = scanner.next().toLowerCase();
+        if (response.equals(ACCEPT_DRAW)) {
             System.out.println("The game ended in a draw.");
             running = false;
             return;
         }
-        drawOffered = true;
-        System.out.println("A draw was offered. Waiting for the other player's decision.");
+        System.out.println("Draw offer declined.");
+        drawOffered = false;
         updateTurn();
     }
 
@@ -111,12 +117,10 @@ public class GameImpl implements Game {
 
         if (isNull(piece)) {
             System.out.println("Invalid move: No piece found at the selected position.");
-
             return false;
         }
         if (board.isMoveLeavingKingInCheck(piece, targetPosition)) {
             System.out.println("Invalid move: Piece move is in check. Please try again.");
-
             return false;
         }
 
@@ -169,9 +173,7 @@ public class GameImpl implements Game {
         char colChar = input.charAt(0);
         char rowChar = input.charAt(1);
 
-        int col = InputHelper.returnCol(colChar);
-        int row = InputHelper.returnRow(rowChar);
-        return new Position(row, col);
+        return new Position(InputHelper.returnRow(rowChar), InputHelper.returnCol(colChar));
     }
 
     private Color getColor() {

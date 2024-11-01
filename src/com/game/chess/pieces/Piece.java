@@ -40,6 +40,7 @@ public abstract class Piece implements Movement {
         if (getPosition().equals(position)) {
             throw new IllegalArgumentException("Invalid move: Position cannot be the same as the current position");
         }
+
         if (Boolean.TRUE.equals(isCaptured)) {
             throw new IllegalArgumentException("Invalid move: Piece is captured. Please try again.");
         }

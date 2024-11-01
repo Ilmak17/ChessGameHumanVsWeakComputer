@@ -12,12 +12,15 @@ public class Queen extends SlidingPiece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (getPosition() == destPosition) {
-            return false;
-        }
-        if (!isDestinationAvailable(destPosition)) {
-            return false;
-        }
+        return validQueenMove(destPosition) && isDestinationAvailable(destPosition);
+    }
+
+    @Override
+    public boolean canAttack(Position destPosition) {
+        return validQueenMove(destPosition);
+    }
+
+    private boolean validQueenMove(Position destPosition) {
         Position curPosition = getPosition();
         int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
         int dRow = Math.abs(destPosition.getRow() - curPosition.getRow());
@@ -30,14 +33,6 @@ public class Queen extends SlidingPiece {
         }
 
         return isDiagonalMove ? isValidDiagonalMove(destPosition) : isValidLinearMove(destPosition);
-    }
-
-    @Override
-    public boolean canAttack(Position destPosition) {
-        if (destPosition == getPosition()) {
-            return false;
-        }
-        return (isMovingInLine(destPosition) || isMovingDiagonally(destPosition)) && isPathClear(destPosition);
     }
 
     @Override

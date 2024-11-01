@@ -10,8 +10,7 @@ public class InputHelper {
     private InputHelper() {}
 
     public static int returnCol(char character) {
-        character = Character.toUpperCase(character);
-        int col = character - 'A';
+        int col = Character.toUpperCase(character) - 'A';
 
         return (col >= 0 && col <= 7) ? col : -1;
     }
