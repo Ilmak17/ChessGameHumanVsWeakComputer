@@ -3,6 +3,9 @@ package com.game.chess.pieces;
 import com.game.chess.pieces.enums.Color;
 import com.game.chess.board.Board;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.util.Objects.isNull;
 
 public abstract class Piece implements Movement {
@@ -29,6 +32,22 @@ public abstract class Piece implements Movement {
 
         setPosition(position);
         setMoved(true);
+    }
+
+    @Override
+    public List<Position> getAllPossibleMoves() {
+        List<Position> allPossibleMoves = new ArrayList<>();
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Position newPos = new Position(i, j);
+                if (isValidMove(newPos)) {
+                    allPossibleMoves.add(newPos);
+                }
+            }
+        }
+
+        return allPossibleMoves;
     }
 
     @Override
