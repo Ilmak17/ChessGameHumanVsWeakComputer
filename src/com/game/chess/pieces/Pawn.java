@@ -23,7 +23,7 @@ public class Pawn extends Piece {
 
     @Override
     public boolean isValidMove(Position destPosition) {
-        if (getPosition() == destPosition) {
+        if (getPosition().equals(destPosition)) {
             return false;
         }
         Board board = getBoard();
@@ -69,7 +69,7 @@ public class Pawn extends Piece {
     @Override
     public boolean canAttack(Position destPosition) {
         Position curPosition = getPosition();
-        if (curPosition == destPosition) return false;
+        if (curPosition.equals(destPosition)) return false;
 
         int direction = getColor().equals(Color.WHITE) ? 1 : -1;
         int dCol = Math.abs(destPosition.getCol() - curPosition.getCol());
